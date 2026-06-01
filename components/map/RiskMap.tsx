@@ -185,8 +185,9 @@ export function RiskMap({
   }, [layer]);
 
   return (
-    <div className="space-y-4">
-      <section className="rounded-lg border border-zinc-200 bg-white p-4">
+    <div className="space-y-6 animate-fade-in">
+      {/* Control Panel */}
+      <section className="rounded-xl border border-zinc-900 bg-zinc-900/20 backdrop-blur-md p-5 animate-slide-up delay-75">
         <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
           <div className="flex flex-wrap gap-2">
             {layers.map((item) => (
@@ -194,22 +195,21 @@ export function RiskMap({
                 key={item.id}
                 type="button"
                 onClick={() => setLayer(item.id)}
-                className={`rounded-md border px-3 py-2 text-sm font-semibold ${
+                className={`rounded-xl border px-4 py-2.5 text-xs font-bold transition-all cursor-pointer ${
                   layer === item.id
-                    ? "border-zinc-950 bg-zinc-950 text-white"
-                    : "border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50"
+                    ? "border-emerald-500 bg-emerald-500/10 text-emerald-400"
+                    : "border-zinc-800 bg-zinc-950 text-zinc-400 hover:border-zinc-700 hover:text-white"
                 }`}
               >
                 {item.label}
               </button>
             ))}
           </div>
-          <div className="grid gap-3 sm:grid-cols-[minmax(220px,1fr)_180px_auto_auto] sm:items-center">
-            <label className="text-sm font-medium text-zinc-700">
-              Risk threshold
-              <span className="ml-2 font-semibold text-zinc-950">{threshold}</span>
+          <div className="grid gap-4 sm:grid-cols-[minmax(220px,1fr)_180px_auto_auto] sm:items-end">
+            <label className="text-xs font-bold uppercase tracking-wider text-zinc-400">
+              Risk threshold: <span className="ml-1 text-white font-extrabold text-sm">{threshold}</span>
               <input
-                className="mt-2 w-full accent-emerald-700"
+                className="mt-3.5 w-full accent-emerald-500 cursor-pointer"
                 type="range"
                 min="0"
                 max="100"
@@ -218,10 +218,10 @@ export function RiskMap({
                 onChange={(event) => setThreshold(Number(event.target.value))}
               />
             </label>
-            <label className="text-sm font-medium text-zinc-700">
+            <label className="text-xs font-bold uppercase tracking-wider text-zinc-400">
               Zone type
               <select
-                className="mt-2 w-full rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm"
+                className="mt-2.5 w-full rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-2.5 text-xs font-semibold text-white focus:outline-none focus:border-zinc-750"
                 value={zoneType}
                 onChange={(event) => setZoneType(event.target.value)}
               >
@@ -230,56 +230,63 @@ export function RiskMap({
                 ))}
               </select>
             </label>
-            <Link href="/dashboard" className="rounded-md bg-emerald-700 px-4 py-2 text-center text-sm font-semibold text-white">
-              Run risk scoring
+            <Link 
+              href="/dashboard" 
+              className="inline-flex h-10 items-center justify-center rounded-xl bg-emerald-600 px-5 text-center text-xs font-bold text-white shadow-lg shadow-emerald-950/30 hover:bg-emerald-500 transition-colors"
+            >
+              Run Risk Scoring
             </Link>
-            <Link href="/optimizer" className="rounded-md border border-zinc-200 px-4 py-2 text-center text-sm font-semibold text-zinc-700 hover:bg-zinc-50">
-              Run optimization
+            <Link 
+              href="/optimizer" 
+              className="inline-flex h-10 items-center justify-center rounded-xl border border-zinc-800 bg-zinc-900/40 px-5 text-center text-xs font-bold text-zinc-300 hover:bg-zinc-900 hover:text-white transition-all"
+            >
+              Run Optimization
             </Link>
           </div>
         </div>
       </section>
 
-      <section className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_360px]">
-        <div className="overflow-hidden rounded-lg border border-zinc-200 bg-white">
-          <div className="flex items-center justify-between border-b border-zinc-200 px-4 py-3">
-            <h2 className="font-semibold text-zinc-950">Khao Yai risk layer</h2>
-            <span className="text-sm text-zinc-500">{featureCollection.features.length} zones visible</span>
+      {/* Map & Detail Cards */}
+      <section className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_360px] animate-slide-up delay-100">
+        <div className="overflow-hidden rounded-xl border border-zinc-900 bg-zinc-900/20 backdrop-blur-md">
+          <div className="flex items-center justify-between border-b border-zinc-900 px-5 py-4">
+            <h2 className="text-base font-bold text-white">Khao Yai Risk Layer</h2>
+            <span className="text-xs font-bold text-zinc-500">{featureCollection.features.length} zones visible</span>
           </div>
           <div className="relative h-[560px] min-h-[420px]">
             <div ref={mapContainerRef} className="absolute inset-0" aria-label="Khao Yai risk map" />
             {mapError ? (
-              <div className="absolute inset-0 grid place-items-center bg-white/95 p-6 text-center">
+              <div className="absolute inset-0 grid place-items-center bg-zinc-950/95 p-6 text-center">
                 <div>
-                  <p className="font-semibold text-zinc-950">Map unavailable</p>
-                  <p className="mt-2 text-sm leading-6 text-zinc-600">{mapError}</p>
-                  <p className="mt-2 text-sm text-zinc-500">Use the low-bandwidth zone table below.</p>
+                  <p className="font-bold text-white">Map Unavailable</p>
+                  <p className="mt-2 text-sm text-zinc-400">{mapError}</p>
+                  <p className="mt-3 text-xs text-zinc-500">Please use the low-bandwidth zone table below.</p>
                 </div>
               </div>
             ) : null}
           </div>
         </div>
 
-        <aside className="rounded-lg border border-zinc-200 bg-white">
-          <div className="border-b border-zinc-200 px-4 py-3">
-            <h2 className="font-semibold text-zinc-950">Selected layer</h2>
-            <p className="mt-1 text-sm text-zinc-600">
+        <aside className="rounded-xl border border-zinc-900 bg-zinc-900/20 backdrop-blur-md flex flex-col max-h-[618px]">
+          <div className="border-b border-zinc-900 px-5 py-4 shrink-0">
+            <h2 className="text-base font-bold text-white">Selected Layer Details</h2>
+            <p className="mt-1 text-xs text-zinc-400 leading-relaxed">
               {hasRiskRun ? "Latest explainable risk scores are active." : "Base risk fallback is active until risk scoring is run."}
             </p>
           </div>
-          <div className="divide-y divide-zinc-100">
-            {filteredZones.slice(0, 6).map((zone) => {
+          <div className="divide-y divide-zinc-900 overflow-y-auto custom-scrollbar">
+            {filteredZones.slice(0, 8).map((zone) => {
               const score = scoreForLayer(zone, layer);
               return (
-                <div key={zone.id} className="px-4 py-3">
+                <div key={zone.id} className="px-5 py-4 hover:bg-zinc-900/10 transition-colors">
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <p className="font-medium text-zinc-950">{zone.code}</p>
-                      <p className="text-sm text-zinc-600">{zone.name}</p>
+                      <p className="font-bold text-white text-sm">{zone.code}</p>
+                      <p className="text-xs text-zinc-400 mt-0.5">{zone.name}</p>
                     </div>
-                    <span className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-bold ring-1 ${riskFill(score)}`}>{score}</span>
+                    <span className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-extrabold ring-1 ${riskFill(score)}`}>{score}</span>
                   </div>
-                  <p className="mt-2 text-sm leading-5 text-zinc-600">{zone.recommendedAction}</p>
+                  <p className="mt-2 text-xs leading-relaxed text-zinc-400">{zone.recommendedAction}</p>
                 </div>
               );
             })}
@@ -287,33 +294,34 @@ export function RiskMap({
         </aside>
       </section>
 
-      <section className="rounded-lg border border-zinc-200 bg-white">
-        <div className="border-b border-zinc-200 px-5 py-4">
-          <h2 className="font-semibold text-zinc-950">Low-bandwidth zone table</h2>
+      {/* Zone Table */}
+      <section className="rounded-xl border border-zinc-900 bg-zinc-900/20 backdrop-blur-md overflow-hidden animate-slide-up delay-150">
+        <div className="border-b border-zinc-900 px-5 py-4">
+          <h2 className="text-base font-bold text-white">Low-Bandwidth Zone Table</h2>
         </div>
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm">
-            <thead className="bg-zinc-50 text-zinc-600">
+          <table className="w-full text-left text-xs border-collapse">
+            <thead className="bg-zinc-950 text-zinc-400 border-b border-zinc-900 font-bold uppercase tracking-wider">
               <tr>
-                <th className="px-5 py-3">Code</th>
-                <th className="px-5 py-3">Zone</th>
-                <th className="px-5 py-3">Type</th>
-                <th className="px-5 py-3">Fire</th>
-                <th className="px-5 py-3">Wildlife</th>
-                <th className="px-5 py-3">Combined</th>
-                <th className="px-5 py-3">Recommended action</th>
+                <th className="px-5 py-3.5">Code</th>
+                <th className="px-5 py-3.5">Zone</th>
+                <th className="px-5 py-3.5">Type</th>
+                <th className="px-5 py-3.5">Fire</th>
+                <th className="px-5 py-3.5">Wildlife</th>
+                <th className="px-5 py-3.5">Combined</th>
+                <th className="px-5 py-3.5 text-left">Recommended Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-100">
+            <tbody className="divide-y divide-zinc-900">
               {filteredZones.map((zone) => (
-                <tr key={zone.id}>
-                  <td className="px-5 py-3 font-medium text-zinc-950">{zone.code}</td>
-                  <td className="px-5 py-3 text-zinc-700">{zone.name}</td>
-                  <td className="px-5 py-3 text-zinc-700">{zone.zoneType}</td>
-                  <td className="px-5 py-3 text-zinc-700">{zone.fireRisk}</td>
-                  <td className="px-5 py-3 text-zinc-700">{zone.wildlifeRisk}</td>
-                  <td className="px-5 py-3 font-semibold text-zinc-950">{zone.combinedPriority}</td>
-                  <td className="min-w-[320px] px-5 py-3 text-zinc-700">{zone.recommendedAction}</td>
+                <tr key={zone.id} className="hover:bg-zinc-900/10 transition-colors">
+                  <td className="px-5 py-4 font-bold text-white">{zone.code}</td>
+                  <td className="px-5 py-4 text-zinc-300">{zone.name}</td>
+                  <td className="px-5 py-4 text-zinc-400">{zone.zoneType}</td>
+                  <td className="px-5 py-4 font-semibold text-zinc-300">{zone.fireRisk}</td>
+                  <td className="px-5 py-4 font-semibold text-zinc-300">{zone.wildlifeRisk}</td>
+                  <td className="px-5 py-4 font-bold text-emerald-400">{zone.combinedPriority}</td>
+                  <td className="min-w-[320px] px-5 py-4 text-zinc-400 leading-relaxed">{zone.recommendedAction}</td>
                 </tr>
               ))}
             </tbody>
@@ -322,8 +330,8 @@ export function RiskMap({
       </section>
 
       {zones.some((zone) => zone.isSynthetic) ? (
-        <p className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
-          Demo zones are synthetic. Replace with official park GIS data before operational use.
+        <p className="rounded-xl border border-amber-500/20 bg-amber-950/10 px-5 py-4 text-xs font-medium text-amber-400 leading-relaxed">
+          ⚠️ Demo zones are synthetic. Replace with official park GIS data before operational use.
         </p>
       ) : null}
     </div>

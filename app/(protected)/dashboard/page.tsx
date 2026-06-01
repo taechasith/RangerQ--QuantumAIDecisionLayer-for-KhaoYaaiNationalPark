@@ -25,64 +25,64 @@ export default async function DashboardPage() {
         title="Operations Dashboard"
         description="Protected command view backed by Google Apps Script / Sheets, with fallback demo data if the web app endpoint is not reachable."
       />
-      <div className="grid gap-4 md:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-4 animate-slide-up delay-75">
         <Card title="Total zones" value={String(zones.length)} detail={usingFallback ? "Fallback demo snapshot" : "Loaded from Apps Script"} />
         <Card title="Severe fire zones" value={String(severeFire)} detail={hasRiskScores ? "Latest fire risk >= 80" : "Base fire risk >= 80"} />
         <Card title="Severe wildlife zones" value={String(severeWildlife)} detail={hasRiskScores ? "Latest wildlife risk >= 80" : "Base wildlife risk >= 80"} />
         <Card title="Latest risk run" value={riskRun?.completedAt ? new Date(riskRun.completedAt).toLocaleString("en-US", { timeZone: "Asia/Bangkok" }) : "Not run"} detail={riskRun?.version || "Run risk scoring to create explainable scores"} />
       </div>
 
-      <div className="mt-6">
+      <div className="mt-6 animate-slide-up delay-100">
         <RunRiskButton />
       </div>
 
-      <section className="mt-6 grid gap-6 lg:grid-cols-2">
-        <div className="rounded-lg border border-zinc-200 bg-white">
-          <div className="border-b border-zinc-200 px-5 py-4">
-            <h2 className="font-semibold text-zinc-950">Top action zones</h2>
+      <section className="mt-6 grid gap-6 lg:grid-cols-2 animate-slide-up delay-150">
+        <div className="rounded-xl border border-zinc-900 bg-zinc-900/20 backdrop-blur-md">
+          <div className="border-b border-zinc-900 px-5 py-4">
+            <h2 className="text-base font-bold text-white">Top Action Zones</h2>
           </div>
-          <div className="divide-y divide-zinc-100">
+          <div className="divide-y divide-zinc-900">
             {topZones.map((zone) => (
-              <div key={zone.id} className="flex items-center justify-between gap-4 px-5 py-4">
+              <div key={zone.id} className="flex items-center justify-between gap-4 px-5 py-4 hover:bg-zinc-900/10 transition-colors">
                 <div>
-                  <p className="font-medium text-zinc-950">{"zoneCode" in zone ? zone.zoneCode : zone.code}</p>
-                  <p className="text-sm text-zinc-600">{"zoneName" in zone ? zone.zoneName : zone.name}</p>
+                  <p className="font-bold text-white">{"zoneCode" in zone ? zone.zoneCode : zone.code}</p>
+                  <p className="text-sm text-zinc-400">{"zoneName" in zone ? zone.zoneName : zone.name}</p>
                   {"recommendedAction" in zone ? (
-                    <p className="mt-1 max-w-xl text-sm text-zinc-500">{zone.recommendedAction}</p>
+                    <p className="mt-1 max-w-xl text-xs leading-relaxed text-zinc-500">{zone.recommendedAction}</p>
                   ) : null}
                 </div>
                 <div className="text-right">
-                  <p className="text-sm font-semibold text-zinc-950">
+                  <p className="text-sm font-extrabold text-white">
                     {"combinedPriority" in zone ? zone.combinedPriority : Math.round((zone.baseFireRisk + zone.baseWildlifeRisk) / 2)}
                   </p>
-                  {"label" in zone ? <p className="mt-1 text-xs font-semibold uppercase text-emerald-700">{zone.label}</p> : null}
+                  {"label" in zone ? <p className="mt-1 text-[10px] tracking-wider font-extrabold uppercase text-emerald-400">{zone.label}</p> : null}
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="rounded-lg border border-zinc-200 bg-white">
-          <div className="border-b border-zinc-200 px-5 py-4">
-            <h2 className="font-semibold text-zinc-950">Data source freshness</h2>
+        <div className="rounded-xl border border-zinc-900 bg-zinc-900/20 backdrop-blur-md">
+          <div className="border-b border-zinc-900 px-5 py-4">
+            <h2 className="text-base font-bold text-white">Data Source Freshness</h2>
           </div>
-          <div className="divide-y divide-zinc-100">
+          <div className="divide-y divide-zinc-900">
             {sources.map((source) => (
-              <div key={source.id} className="px-5 py-4">
+              <div key={source.id} className="px-5 py-4 hover:bg-zinc-900/10 transition-colors">
                 <div className="flex items-center justify-between gap-3">
-                  <p className="font-medium text-zinc-950">{source.name}</p>
-                  <span className="rounded-full bg-zinc-100 px-2.5 py-1 text-xs font-semibold text-zinc-700">{source.status}</span>
+                  <p className="font-semibold text-white">{source.name}</p>
+                  <span className="rounded-full bg-zinc-900/80 border border-zinc-800 px-2.5 py-0.5 text-xs font-bold text-zinc-400">{source.status}</span>
                 </div>
-                <p className="mt-1 text-sm text-zinc-600">{source.freshnessWarning || source.lastSyncedAt || "Ready"}</p>
+                <p className="mt-1.5 text-xs text-zinc-500">{source.freshnessWarning || source.lastSyncedAt || "Ready"}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <div className="mt-6 rounded-lg border border-zinc-200 bg-white p-5">
-        <h2 className="font-semibold text-zinc-950">Backend</h2>
-        <p className="mt-2 text-sm leading-6 text-zinc-600">{status.message}</p>
+      <div className="mt-6 rounded-xl border border-zinc-900 bg-zinc-900/20 backdrop-blur-md p-5 animate-slide-up delay-200">
+        <h2 className="text-base font-bold text-white">Backend Status</h2>
+        <p className="mt-2 text-sm leading-relaxed text-zinc-400">{status.message}</p>
       </div>
     </>
   );

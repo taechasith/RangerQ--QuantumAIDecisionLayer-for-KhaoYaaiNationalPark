@@ -86,13 +86,14 @@ export function OptimizerResult() {
   }
 
   return (
-    <div className="space-y-6">
-      <section className="rounded-lg border border-zinc-200 bg-white p-5">
+    <div className="space-y-6 animate-fade-in">
+      {/* Configuration Panel */}
+      <section className="rounded-xl border border-zinc-900 bg-zinc-900/20 backdrop-blur-md p-5 animate-slide-up delay-75">
         <div className="grid gap-4 lg:grid-cols-6 lg:items-end">
-          <label className="text-sm font-medium text-zinc-700">
+          <label className="text-xs font-bold uppercase tracking-wider text-zinc-400">
             Max zones
             <input
-              className="mt-2 w-full rounded-md border border-zinc-200 px-3 py-2"
+              className="mt-2 w-full rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-2.5 text-xs font-semibold text-white focus:outline-none focus:border-zinc-700"
               type="number"
               min="1"
               max="10"
@@ -100,10 +101,10 @@ export function OptimizerResult() {
               onChange={(event) => updateInput("maxZones", Number(event.target.value))}
             />
           </label>
-          <label className="text-sm font-medium text-zinc-700">
+          <label className="text-xs font-bold uppercase tracking-wider text-zinc-400">
             Patrol hours
             <input
-              className="mt-2 w-full rounded-md border border-zinc-200 px-3 py-2"
+              className="mt-2 w-full rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-2.5 text-xs font-semibold text-white focus:outline-none focus:border-zinc-700"
               type="number"
               min="1"
               max="24"
@@ -111,10 +112,10 @@ export function OptimizerResult() {
               onChange={(event) => updateInput("maxPatrolHours", Number(event.target.value))}
             />
           </label>
-          <label className="text-sm font-medium text-zinc-700">
+          <label className="text-xs font-bold uppercase tracking-wider text-zinc-400">
             Ranger teams
             <input
-              className="mt-2 w-full rounded-md border border-zinc-200 px-3 py-2"
+              className="mt-2 w-full rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-2.5 text-xs font-semibold text-white focus:outline-none focus:border-zinc-700"
               type="number"
               min="1"
               max="8"
@@ -122,10 +123,10 @@ export function OptimizerResult() {
               onChange={(event) => updateInput("rangerTeams", Number(event.target.value))}
             />
           </label>
-          <label className="text-sm font-medium text-zinc-700">
+          <label className="text-xs font-bold uppercase tracking-wider text-zinc-400">
             Method
             <select
-              className="mt-2 w-full rounded-md border border-zinc-200 bg-white px-3 py-2"
+              className="mt-2.5 w-full rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-2.5 text-xs font-semibold text-white focus:outline-none focus:border-zinc-700"
               value={input.method}
               onChange={(event) => updateInput("method", event.target.value as OptimizeInput["method"])}
             >
@@ -135,107 +136,118 @@ export function OptimizerResult() {
               <option value="QBRAID_QUBO">qBraid QUBO</option>
             </select>
           </label>
-          <div className="space-y-2 text-sm text-zinc-700">
-            <label className="flex items-center gap-2">
+          <div className="flex flex-col gap-2.5 py-1 text-xs font-semibold text-zinc-450">
+            <label className="flex items-center gap-2 cursor-pointer select-none">
               <input
                 type="checkbox"
+                className="accent-emerald-500 h-4 w-4"
                 checked={input.requireFireCoverage}
                 onChange={(event) => updateInput("requireFireCoverage", event.target.checked)}
               />
-              Fire coverage
+              <span>Fire coverage</span>
             </label>
-            <label className="flex items-center gap-2">
+            <label className="flex items-center gap-2 cursor-pointer select-none">
               <input
                 type="checkbox"
+                className="accent-emerald-500 h-4 w-4"
                 checked={input.requireWildlifeCoverage}
                 onChange={(event) => updateInput("requireWildlifeCoverage", event.target.checked)}
               />
-              Wildlife coverage
+              <span>Wildlife coverage</span>
             </label>
           </div>
           <button
             type="button"
             onClick={run}
             disabled={status === "running"}
-            className="rounded-md bg-emerald-700 px-4 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:bg-emerald-400"
+            className="inline-flex h-10 items-center justify-center rounded-xl bg-emerald-600 px-5 text-xs font-bold text-white shadow-lg shadow-emerald-950/30 hover:bg-emerald-500 disabled:cursor-not-allowed disabled:bg-emerald-800 disabled:opacity-50 transition-all duration-200 cursor-pointer"
           >
-            {status === "running" ? "Running..." : "Run optimization"}
+            {status === "running" ? "Running..." : "Run Optimization"}
           </button>
         </div>
         {message ? (
-          <p className={`mt-4 text-sm ${status === "error" ? "text-red-700" : "text-emerald-700"}`}>{message}</p>
+          <p className={`mt-4 text-xs font-medium ${status === "error" ? "text-red-400" : "text-emerald-400"}`}>{message}</p>
         ) : null}
       </section>
 
       {result ? (
         <>
-          <section className="grid gap-4 md:grid-cols-4">
+          {/* Results Summary Metrics */}
+          <section className="grid gap-4 md:grid-cols-4 animate-slide-up delay-100">
             <Metric title="Selected zones" value={String(result.selected.length)} detail={`${result.rejected.length} rejected`} />
-            <Metric title="Patrol hours" value={String(result.estimatedPatrolHours)} detail={`Limit ${input.maxPatrolHours}`} />
-            <Metric title="Coverage score" value={String(result.coverageScore)} detail={`Penalty ${result.travelPenalty}`} />
-            <Metric title="qBraid status" value={result.qbraidStatus} detail={result.fallbackReason} />
+            <Metric title="Patrol hours" value={String(result.estimatedPatrolHours)} detail={`Limit: ${input.maxPatrolHours} hrs`} />
+            <Metric title="Coverage score" value={String(result.coverageScore)} detail={`Penalty: ${result.travelPenalty}`} />
+            <Metric title="qBraid status" value={result.qbraidStatus} detail={result.fallbackReason || "Active status"} />
           </section>
 
-          <section className="rounded-lg border border-zinc-200 bg-white p-5">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          {/* Quantum Backend Control */}
+          <section className="rounded-xl border border-zinc-900 bg-zinc-900/20 backdrop-blur-md p-5 animate-slide-up delay-150">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <h2 className="font-semibold text-zinc-950">Quantum backend status</h2>
-                <p className="mt-1 text-sm text-zinc-600">Submit or log the QUBO path without blocking the classical action plan.</p>
+                <h2 className="text-base font-bold text-white">Quantum Backend Status</h2>
+                <p className="mt-1 text-xs text-zinc-400">Submit or log the generated QUBO payload to the qBraid solver.</p>
               </div>
               <button
                 type="button"
                 onClick={submitQbraid}
                 disabled={qbraidStatus === "running"}
-                className="rounded-md border border-zinc-200 px-4 py-2 text-sm font-semibold text-zinc-700 hover:bg-zinc-50 disabled:cursor-not-allowed disabled:text-zinc-400"
+                className="inline-flex h-10 items-center justify-center rounded-xl border border-zinc-800 bg-zinc-900/40 px-5 text-xs font-bold text-zinc-300 hover:bg-zinc-900 hover:text-white transition-all cursor-pointer disabled:cursor-not-allowed disabled:text-zinc-650"
               >
-                {qbraidStatus === "running" ? "Checking qBraid..." : "Submit/log qBraid"}
+                {qbraidStatus === "running" ? "Submitting to qBraid..." : "Submit/Log qBraid"}
               </button>
             </div>
             {qbraidMessage ? (
-              <p className={`mt-3 text-sm leading-6 ${qbraidStatus === "error" ? "text-red-700" : "text-zinc-700"}`}>{qbraidMessage}</p>
+              <p className={`mt-3.5 text-xs font-medium leading-relaxed ${qbraidStatus === "error" ? "text-red-400" : "text-zinc-400"}`}>{qbraidMessage}</p>
             ) : null}
           </section>
 
-          <section className="rounded-lg border border-zinc-200 bg-white">
-            <div className="border-b border-zinc-200 px-5 py-4">
-              <h2 className="font-semibold text-zinc-950">Selected patrol zones</h2>
+          {/* Selected Zones List */}
+          <section className="rounded-xl border border-zinc-900 bg-zinc-900/20 backdrop-blur-md overflow-hidden animate-slide-up delay-200">
+            <div className="border-b border-zinc-900 px-5 py-4">
+              <h2 className="text-base font-bold text-white">Selected Patrol Zones</h2>
             </div>
-            <div className="divide-y divide-zinc-100">
+            <div className="divide-y divide-zinc-900">
               {result.selected.map((zone, index) => (
-                <div key={zone.zoneId} className="grid gap-3 px-5 py-4 md:grid-cols-[80px_minmax(0,1fr)_120px] md:items-center">
-                  <p className="text-sm font-semibold text-zinc-500">Rank {index + 1}</p>
+                <div key={zone.zoneId} className="grid gap-3 px-5 py-4 md:grid-cols-[100px_minmax(0,1fr)_120px] md:items-center hover:bg-zinc-900/10 transition-colors">
+                  <p className="text-xs font-bold text-zinc-500">Rank {index + 1}</p>
                   <div>
-                    <p className="font-medium text-zinc-950">{zone.code} - {zone.name}</p>
-                    <p className="mt-1 text-sm text-zinc-600">{zone.reason}</p>
+                    <p className="font-bold text-white text-sm">{zone.code} — {zone.name}</p>
+                    <p className="mt-1 text-xs leading-relaxed text-zinc-400">{zone.reason}</p>
                   </div>
-                  <p className="text-sm font-semibold text-zinc-950">{zone.estimatedHours} hrs</p>
+                  <p className="text-xs font-extrabold text-white text-right md:text-left">{zone.estimatedHours} hrs</p>
                 </div>
               ))}
             </div>
           </section>
 
-          <section className="rounded-lg border border-zinc-200 bg-white">
-            <div className="border-b border-zinc-200 px-5 py-4">
-              <h2 className="font-semibold text-zinc-950">Ranger action plan</h2>
+          {/* Action Plan */}
+          <section className="rounded-xl border border-zinc-900 bg-zinc-900/20 backdrop-blur-md overflow-hidden animate-slide-up delay-300">
+            <div className="border-b border-zinc-900 px-5 py-4">
+              <h2 className="text-base font-bold text-white">Ranger Action Plan</h2>
             </div>
             <div className="grid gap-4 p-5 lg:grid-cols-2">
               {result.actionPlan.map((plan) => (
-                <div key={plan.teamName} className="rounded-md border border-zinc-200 p-4">
-                  <p className="font-semibold text-zinc-950">{plan.teamName}</p>
-                  <p className="mt-2 text-sm text-zinc-700">Route: {plan.route.join(" -> ")}</p>
-                  <p className="mt-2 text-sm text-zinc-700">Objective: {plan.objective}</p>
-                  <p className="mt-2 text-sm text-zinc-600">Why: {plan.why}</p>
-                  <p className="mt-2 text-sm text-zinc-600">Estimated time: {plan.estimatedHours} hours.</p>
-                  <p className="mt-2 text-sm text-zinc-600">Safety note: {plan.safetyNote}</p>
-                  <p className="mt-2 text-sm text-zinc-600">Fallback: {plan.fallback}</p>
+                <div key={plan.teamName} className="rounded-xl border border-zinc-800/80 bg-zinc-950/40 p-5 space-y-3">
+                  <div className="flex items-center justify-between gap-3">
+                    <p className="font-bold text-white text-sm">{plan.teamName}</p>
+                    <span className="rounded-full bg-emerald-950/30 border border-emerald-900/30 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-emerald-400">{plan.estimatedHours} Hours</span>
+                  </div>
+                  <p className="text-xs text-zinc-300"><strong className="text-zinc-400">Route:</strong> {plan.route.join(" ➔ ")}</p>
+                  <p className="text-xs text-zinc-300"><strong className="text-zinc-400">Objective:</strong> {plan.objective}</p>
+                  <p className="text-xs leading-relaxed text-zinc-400"><strong className="text-zinc-500">Rationale:</strong> {plan.why}</p>
+                  <div className="grid gap-2 pt-2 border-t border-zinc-900 text-xs">
+                    <p className="text-zinc-400"><strong className="text-zinc-500">Safety Note:</strong> {plan.safetyNote}</p>
+                    <p className="text-zinc-400"><strong className="text-zinc-500">Fallback Plan:</strong> {plan.fallback}</p>
+                  </div>
                 </div>
               ))}
             </div>
           </section>
 
-          <section className="rounded-lg border border-zinc-200 bg-white p-5">
-            <h2 className="font-semibold text-zinc-950">QUBO payload</h2>
-            <pre className="mt-4 max-h-96 overflow-auto rounded-md bg-zinc-950 p-4 text-xs leading-5 text-zinc-50">
+          {/* QUBO Payload JSON */}
+          <section className="rounded-xl border border-zinc-900 bg-zinc-900/20 backdrop-blur-md p-5">
+            <h2 className="text-base font-bold text-white">QUBO Payload</h2>
+            <pre className="mt-4 max-h-96 overflow-auto rounded-xl bg-zinc-950 border border-zinc-900 p-4 text-[11px] leading-5 text-zinc-400 font-mono">
               {JSON.stringify(result.quboPayload, null, 2)}
             </pre>
           </section>
@@ -247,10 +259,12 @@ export function OptimizerResult() {
 
 function Metric({ title, value, detail }: { title: string; value: string; detail: string }) {
   return (
-    <div className="rounded-lg border border-zinc-200 bg-white p-5">
-      <p className="text-sm font-medium text-zinc-500">{title}</p>
-      <p className="mt-2 break-words text-2xl font-semibold text-zinc-950">{value}</p>
-      <p className="mt-2 text-sm leading-6 text-zinc-600">{detail}</p>
+    <div className="group rounded-xl border border-zinc-900 bg-zinc-900/20 backdrop-blur-md p-5 hover:border-emerald-500/30 hover:bg-zinc-900/40 transition-all duration-300">
+      <p className="text-xs font-semibold uppercase tracking-wider text-zinc-400 group-hover:text-zinc-300 transition-colors">{title}</p>
+      <p className="mt-3 text-2xl font-black tracking-tight text-white break-words">
+        {value}
+      </p>
+      <p className="mt-2 text-xs text-zinc-500">{detail}</p>
     </div>
   );
 }

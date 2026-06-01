@@ -7,9 +7,11 @@ export function PageHeader({
 }) {
   return (
     <div className="mb-6">
-      <p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-700">Phase 3</p>
-      <h1 className="mt-2 text-3xl font-semibold tracking-tight text-zinc-950">{title}</h1>
-      <p className="mt-2 max-w-3xl text-sm leading-6 text-zinc-600">{description}</p>
+      <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-400 bg-emerald-950/40 border border-emerald-900/30 rounded-full px-3 py-1 inline-block">
+        Phase 3
+      </p>
+      <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-white">{title}</h1>
+      <p className="mt-2 max-w-3xl text-sm leading-relaxed text-zinc-400">{description}</p>
     </div>
   );
 }
@@ -24,10 +26,12 @@ export function Card({
   detail: string;
 }) {
   return (
-    <div className="rounded-lg border border-zinc-200 bg-white p-5">
-      <p className="text-sm font-medium text-zinc-500">{title}</p>
-      <p className="mt-2 text-2xl font-semibold text-zinc-950">{value}</p>
-      <p className="mt-2 text-sm leading-6 text-zinc-600">{detail}</p>
+    <div className="group rounded-xl border border-zinc-900 bg-zinc-900/20 backdrop-blur-md p-5 hover:border-emerald-500/30 hover:bg-zinc-900/40 transition-all duration-300">
+      <p className="text-xs font-semibold uppercase tracking-wider text-zinc-400 group-hover:text-zinc-300 transition-colors">{title}</p>
+      <p className="mt-3 text-3xl font-black tracking-tight text-white bg-gradient-to-br from-white to-zinc-400 bg-clip-text">
+        {value}
+      </p>
+      <p className="mt-2 text-xs text-zinc-500">{detail}</p>
     </div>
   );
 }

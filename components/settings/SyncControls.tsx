@@ -27,43 +27,51 @@ export function SyncControls() {
   const [firmsState, runFirms] = useSyncAction("/api/sync/firms");
 
   return (
-    <div className="mt-6 grid gap-4 md:grid-cols-2">
-      <div className="rounded-lg border border-zinc-200 bg-white p-5">
-        <h2 className="font-semibold text-zinc-950">Open-Meteo weather sync</h2>
-        <p className="mt-2 text-sm leading-6 text-zinc-600">
-          Fetches current forecast variables for every seeded zone centroid.
-        </p>
-        <button
-          type="button"
-          onClick={() => void runWeather()}
-          className="mt-4 rounded-full bg-zinc-950 px-4 py-2 text-sm font-semibold text-white"
-        >
-          Run weather sync
-        </button>
-        {weatherState.message ? (
-          <p className={`mt-3 text-sm ${weatherState.status === "error" ? "text-red-700" : "text-zinc-600"}`}>
-            {weatherState.message}
+    <div className="mt-6 grid gap-6 md:grid-cols-2 animate-slide-up delay-200">
+      <div className="rounded-xl border border-zinc-900 bg-zinc-900/20 backdrop-blur-md p-5 flex flex-col justify-between">
+        <div>
+          <h2 className="text-base font-bold text-white">Open-Meteo Weather Sync</h2>
+          <p className="mt-1 text-xs text-zinc-400 leading-relaxed">
+            Fetches hyper-local meteorological and soil metrics for all Khao Yai zone centroids.
           </p>
-        ) : null}
+        </div>
+        <div>
+          <button
+            type="button"
+            onClick={() => void runWeather()}
+            className="mt-4 inline-flex h-9 items-center justify-center rounded-xl bg-zinc-900 hover:bg-zinc-800 text-xs font-bold text-white px-5 border border-zinc-800 cursor-pointer transition-colors"
+          >
+            Run Weather Sync
+          </button>
+          {weatherState.message ? (
+            <p className={`mt-3 text-xs font-semibold ${weatherState.status === "error" ? "text-red-400" : "text-emerald-400"}`}>
+              {weatherState.message}
+            </p>
+          ) : null}
+        </div>
       </div>
 
-      <div className="rounded-lg border border-zinc-200 bg-white p-5">
-        <h2 className="font-semibold text-zinc-950">NASA FIRMS sync</h2>
-        <p className="mt-2 text-sm leading-6 text-zinc-600">
-          Uses Khao Yai bounding box. If `FIRMS_MAP_KEY` is missing, stores a demo hotspot with a clear warning.
-        </p>
-        <button
-          type="button"
-          onClick={() => void runFirms()}
-          className="mt-4 rounded-full bg-zinc-950 px-4 py-2 text-sm font-semibold text-white"
-        >
-          Run FIRMS sync
-        </button>
-        {firmsState.message ? (
-          <p className={`mt-3 text-sm ${firmsState.status === "error" ? "text-red-700" : "text-zinc-600"}`}>
-            {firmsState.message}
+      <div className="rounded-xl border border-zinc-900 bg-zinc-900/20 backdrop-blur-md p-5 flex flex-col justify-between">
+        <div>
+          <h2 className="text-base font-bold text-white">NASA FIRMS Sync</h2>
+          <p className="mt-1 text-xs text-zinc-400 leading-relaxed">
+            Retrieves near-real-time active thermal hotspots using Khao Yai's geographic bounding box.
           </p>
-        ) : null}
+        </div>
+        <div>
+          <button
+            type="button"
+            onClick={() => void runFirms()}
+            className="mt-4 inline-flex h-9 items-center justify-center rounded-xl bg-zinc-900 hover:bg-zinc-800 text-xs font-bold text-white px-5 border border-zinc-800 cursor-pointer transition-colors"
+          >
+            Run FIRMS Sync
+          </button>
+          {firmsState.message ? (
+            <p className={`mt-3 text-xs font-semibold ${firmsState.status === "error" ? "text-red-400" : "text-emerald-400"}`}>
+              {firmsState.message}
+            </p>
+          ) : null}
+        </div>
       </div>
     </div>
   );

@@ -10,56 +10,58 @@ export default async function SettingsPage() {
   const auditLogs = await getLatestAuditLogs();
 
   return (
-    <>
+    <div className="space-y-6 animate-fade-in">
       <PageHeader
         title="Settings"
         description="Backend and credential status for the protected RangerQ app."
       />
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-3 animate-slide-up delay-75">
         <Card title="Data backend" value={status.backend} detail={status.message} />
         <Card title="Apps Script API" value={status.configured ? "Configured" : "Missing"} detail={status.apiUrl || "Set GOOGLE_SHEETS_API_URL"} />
         <Card title="Auth mode" value="Demo admin" detail="Credentials are read from .env.local." />
       </div>
-      <div className="mt-4 grid gap-4 md:grid-cols-4">
+      <div className="mt-4 grid gap-4 md:grid-cols-4 animate-slide-up delay-100">
         <Card title="NASA FIRMS" value={process.env.FIRMS_MAP_KEY ? "Configured" : "Missing"} detail={process.env.FIRMS_MAP_KEY ? "Real hotspot sync enabled" : "Falls back to demo hotspot mode"} />
         <Card title="qBraid API" value={process.env.QBRAID_API_KEY ? "Configured" : "Missing"} detail={process.env.QBRAID_API_KEY ? "Remote credential present" : "Local worker fallback available"} />
         <Card title="qBraid endpoint" value={process.env.QBRAID_API_URL ? "Configured" : "Missing"} detail={process.env.QBRAID_API_URL ? "REST submission path enabled" : "External worker command shown"} />
         <Card title="SMART Import" value="Active" detail="Supports CSV and GeoJSON upload formats" />
       </div>
-      <div className="mt-6 rounded-lg border border-zinc-200 bg-white p-5">
-        <h2 className="font-semibold text-zinc-950">Google Apps Script database</h2>
-        <dl className="mt-4 space-y-3 text-sm">
+      <div className="mt-6 rounded-xl border border-zinc-900 bg-zinc-900/20 backdrop-blur-md p-5 animate-slide-up delay-150">
+        <h2 className="text-base font-bold text-white">Google Apps Script Database</h2>
+        <dl className="mt-4 space-y-4 text-xs">
           <div>
-            <dt className="font-medium text-zinc-700">Script editor</dt>
-            <dd className="mt-1 break-all text-zinc-600">{status.editorUrl}</dd>
+            <dt className="font-bold text-zinc-400 uppercase tracking-wider">Script Editor URL</dt>
+            <dd className="mt-1.5 break-all text-zinc-300 font-semibold">{status.editorUrl}</dd>
           </div>
           <div>
-            <dt className="font-medium text-zinc-700">Web app endpoint</dt>
-            <dd className="mt-1 break-all text-zinc-600">{status.apiUrl || "Not set"}</dd>
+            <dt className="font-bold text-zinc-400 uppercase tracking-wider">Web App Endpoint</dt>
+            <dd className="mt-1.5 break-all text-zinc-300 font-semibold">{status.apiUrl || "Not Configured"}</dd>
           </div>
         </dl>
       </div>
+
       <SyncControls />
-      <div className="mt-6 rounded-lg border border-zinc-200 bg-white">
-        <div className="border-b border-zinc-200 px-5 py-4">
-          <h2 className="font-semibold text-zinc-950">Audit log</h2>
-          <p className="mt-1 text-sm text-zinc-600">Latest imports, syncs, risk runs, optimization runs, and qBraid actions.</p>
+
+      <div className="mt-6 rounded-xl border border-zinc-900 bg-zinc-900/20 backdrop-blur-md overflow-hidden animate-slide-up delay-300">
+        <div className="border-b border-zinc-900 px-5 py-4">
+          <h2 className="text-base font-bold text-white">Audit Log</h2>
+          <p className="mt-1 text-xs text-zinc-400">Latest imports, syncs, risk runs, optimization runs, and qBraid actions.</p>
         </div>
-        <div className="divide-y divide-zinc-100">
+        <div className="divide-y divide-zinc-900">
           {auditLogs.length ? auditLogs.map((log) => (
-            <div key={log.id} className="grid gap-2 px-5 py-4 md:grid-cols-[180px_180px_minmax(0,1fr)]">
-              <p className="text-sm font-medium text-zinc-950">{log.action}</p>
-              <p className="text-sm text-zinc-600">{log.entity}{log.entityId ? `:${log.entityId}` : ""}</p>
+            <div key={log.id} className="grid gap-2 px-5 py-4 md:grid-cols-[180px_180px_minmax(0,1fr)] hover:bg-zinc-900/10 transition-colors">
+              <p className="text-xs font-bold text-white">{log.action}</p>
+              <p className="text-xs text-zinc-300">{log.entity}{log.entityId ? `:${log.entityId}` : ""}</p>
               <div>
-                <p className="text-sm text-zinc-600">{log.createdAt || "No timestamp"}</p>
-                {log.metadata ? <p className="mt-1 break-all text-xs text-zinc-500">{log.metadata}</p> : null}
+                <p className="text-xs text-zinc-400">{log.createdAt || "No timestamp"}</p>
+                {log.metadata ? <p className="mt-1.5 break-all text-[10px] text-zinc-500 font-mono">{log.metadata}</p> : null}
               </div>
             </div>
           )) : (
-            <div className="px-5 py-4 text-sm text-zinc-600">No audit log records are available yet.</div>
+            <div className="px-5 py-4 text-xs text-zinc-400">No audit log records are available yet.</div>
           )}
         </div>
       </div>
-    </>
+    </div>
   );
 }
