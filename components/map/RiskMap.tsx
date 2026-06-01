@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
-import maplibregl, { type Map as MapLibreMap, type Popup } from "maplibre-gl";
+import maplibregl, { type Map as MapLibreMap, type Popup, type StyleSpecification } from "maplibre-gl";
 
 import { riskMapFeatureCollection, type MapLayer, type RiskMapZone } from "@/lib/geo/geojson";
 
@@ -18,6 +18,20 @@ const layerColors: Record<MapLayer, string> = {
   wildlife: "#7c3aed",
   combined: "#047857",
   patrol: "#0369a1",
+};
+
+const offlineStyle: StyleSpecification = {
+  version: 8,
+  sources: {},
+  layers: [
+    {
+      id: "rangerq-background",
+      type: "background",
+      paint: {
+        "background-color": "#07130f",
+      },
+    },
+  ],
 };
 
 function scoreForLayer(zone: RiskMapZone, layer: MapLayer) {
@@ -82,7 +96,7 @@ export function RiskMap({
     try {
       mapRef.current = new maplibregl.Map({
         container: mapContainerRef.current,
-        style: mapStyleUrl,
+        style: mapStyleUrl || offlineStyle,
         center: [101.42, 14.4],
         zoom: 9,
         attributionControl: false,
@@ -90,6 +104,9 @@ export function RiskMap({
 
       mapRef.current.addControl(new maplibregl.NavigationControl({ visualizePitch: true }), "top-right");
       mapRef.current.addControl(new maplibregl.AttributionControl({ compact: true }), "bottom-right");
+      mapRef.current.once("load", () => {
+        mapRef.current?.resize();
+      });
 
       mapRef.current.on("error", (event) => {
         const error = event.error instanceof Error ? event.error.message : "Map failed to load";
@@ -169,11 +186,15 @@ export function RiskMap({
       });
     };
 
+    const resizeFrame = requestAnimationFrame(() => map.resize());
+
     if (map.isStyleLoaded()) {
       applyData();
     } else {
       map.once("load", applyData);
     }
+
+    return () => cancelAnimationFrame(resizeFrame);
   }, [featureCollection, layer]);
 
   useEffect(() => {
@@ -254,7 +275,7 @@ export function RiskMap({
             <span className="text-xs font-bold text-zinc-500">{featureCollection.features.length} zones visible</span>
           </div>
           <div className="relative h-[420px] min-h-[360px] sm:h-[520px] xl:h-[560px]">
-            <div ref={mapContainerRef} className="absolute inset-0" aria-label="Khao Yai risk map" />
+            <div ref={mapContainerRef} className="absolute inset-0 h-full w-full" style={{ minHeight: "360px" }} aria-label="Khao Yai risk map" />
             {mapError ? (
               <div className="absolute inset-0 grid place-items-center bg-zinc-950/95 p-6 text-center">
                 <div>

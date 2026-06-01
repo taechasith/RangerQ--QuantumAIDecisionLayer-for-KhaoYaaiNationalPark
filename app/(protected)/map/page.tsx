@@ -13,7 +13,7 @@ export default async function MapPage() {
   const mapStyleUrl =
     envStyleUrl && envStyleUrl !== "https://demotiles.maplibre.org/style.json"
       ? envStyleUrl
-      : "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json";
+      : "";
 
   return (
     <>

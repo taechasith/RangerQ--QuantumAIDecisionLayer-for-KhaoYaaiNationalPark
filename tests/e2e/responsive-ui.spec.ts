@@ -51,6 +51,13 @@ for (const viewport of [
     for (const appPage of protectedPages) {
       await page.goto(appPage.path);
       await expect(page.getByRole("heading", { name: appPage.text })).toBeVisible();
+      if (appPage.path === "/map") {
+        const mapBox = page.getByLabel("Khao Yai risk map");
+        await expect(mapBox).toBeVisible();
+        const box = await mapBox.boundingBox();
+        expect(box?.height).toBeGreaterThan(300);
+        expect(await page.locator(".maplibregl-canvas").count()).toBeGreaterThan(0);
+      }
       await expectNoHorizontalOverflow(page);
     }
   });
