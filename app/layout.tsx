@@ -1,5 +1,18 @@
 import type { Metadata } from "next";
+import { IBM_Plex_Sans, IBM_Plex_Sans_Thai } from "next/font/google";
 import "./globals.css";
+
+const ibmPlexSans = IBM_Plex_Sans({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-ibm-sans",
+});
+
+const ibmPlexSansThai = IBM_Plex_Sans_Thai({
+  subsets: ["thai"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-ibm-thai",
+});
 
 export const metadata: Metadata = {
   title: "RangerQ - Khao Yai National Park Digital Twin",
@@ -14,7 +27,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className="h-full antialiased"
+      className={`${ibmPlexSans.variable} ${ibmPlexSansThai.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
