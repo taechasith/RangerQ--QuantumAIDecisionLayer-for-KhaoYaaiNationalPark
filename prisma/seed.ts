@@ -128,6 +128,7 @@ async function main() {
     { type: DataSourceType.CAMERA_AI, name: "Camera and AI detections", status: "demo" },
     { type: DataSourceType.VISITOR_CSV, name: "Visitor pressure CSV", status: "demo" },
     { type: DataSourceType.OPEN_METEO, name: "Open-Meteo weather", status: "configured" },
+    { type: DataSourceType.GBIF_OCCURRENCE, name: "GBIF species occurrences", status: "configured" },
   ];
 
   for (const source of sources) {

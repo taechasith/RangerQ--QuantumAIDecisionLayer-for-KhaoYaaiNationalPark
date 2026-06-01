@@ -1,5 +1,3 @@
-import { prisma } from "@/lib/db";
-
 type SheetAction = "list" | "get" | "append" | "upsert";
 
 type SheetResponse<T> = {
@@ -153,21 +151,28 @@ type PrismaModelDelegate = {
   }) => Promise<Record<string, unknown>>;
 };
 
-const modelMapping: Record<string, PrismaModelDelegate> = {
-  Zone: prisma.zone as unknown as PrismaModelDelegate,
-  DataSource: prisma.dataSource as unknown as PrismaModelDelegate,
-  RiskRun: prisma.riskRun as unknown as PrismaModelDelegate,
-  ZoneRiskScore: prisma.zoneRiskScore as unknown as PrismaModelDelegate,
-  OptimizationRun: prisma.optimizationRun as unknown as PrismaModelDelegate,
-  SelectedZone: prisma.selectedZone as unknown as PrismaModelDelegate,
-  PatrolPlan: prisma.patrolPlan as unknown as PrismaModelDelegate,
-  AuditLog: prisma.auditLog as unknown as PrismaModelDelegate,
-  WeatherSnapshot: prisma.weatherSnapshot as unknown as PrismaModelDelegate,
-  FireHotspot: prisma.fireHotspot as unknown as PrismaModelDelegate,
-  CameraDetection: prisma.cameraDetection as unknown as PrismaModelDelegate,
-  VisitorPressure: prisma.visitorPressure as unknown as PrismaModelDelegate,
-  ManualNote: prisma.manualNote as unknown as PrismaModelDelegate,
-};
+async function getPrismaModel(table: string): Promise<PrismaModelDelegate> {
+  const { prisma } = await import("@/lib/db");
+  const modelMapping: Record<string, PrismaModelDelegate> = {
+    Zone: prisma.zone as unknown as PrismaModelDelegate,
+    DataSource: prisma.dataSource as unknown as PrismaModelDelegate,
+    RiskRun: prisma.riskRun as unknown as PrismaModelDelegate,
+    ZoneRiskScore: prisma.zoneRiskScore as unknown as PrismaModelDelegate,
+    OptimizationRun: prisma.optimizationRun as unknown as PrismaModelDelegate,
+    SelectedZone: prisma.selectedZone as unknown as PrismaModelDelegate,
+    PatrolPlan: prisma.patrolPlan as unknown as PrismaModelDelegate,
+    AuditLog: prisma.auditLog as unknown as PrismaModelDelegate,
+    WeatherSnapshot: prisma.weatherSnapshot as unknown as PrismaModelDelegate,
+    FireHotspot: prisma.fireHotspot as unknown as PrismaModelDelegate,
+    CameraDetection: prisma.cameraDetection as unknown as PrismaModelDelegate,
+    VisitorPressure: prisma.visitorPressure as unknown as PrismaModelDelegate,
+    ManualNote: prisma.manualNote as unknown as PrismaModelDelegate,
+  };
+
+  const model = modelMapping[table];
+  if (!model) throw new Error(`Unknown database model for table: ${table}`);
+  return model;
+}
 
 export class GoogleSheetsStore {
   private readonly apiUrl: string;
@@ -193,8 +198,7 @@ export class GoogleSheetsStore {
 
   async list<T extends Record<string, unknown>>(table: string): Promise<T[]> {
     if (this.isDatabase) {
-      const model = modelMapping[table];
-      if (!model) throw new Error(`Unknown database model for table: ${table}`);
+      const model = await getPrismaModel(table);
       const rows = await model.findMany();
       return rows.map(toRaw) as T[];
     }
@@ -205,8 +209,7 @@ export class GoogleSheetsStore {
 
   async get<T extends Record<string, unknown>>(table: string, id: string): Promise<T | null> {
     if (this.isDatabase) {
-      const model = modelMapping[table];
-      if (!model) throw new Error(`Unknown database model for table: ${table}`);
+      const model = await getPrismaModel(table);
       const row = await model.findUnique({ where: { id } });
       return (row ? toRaw(row) : null) as T | null;
     }
@@ -217,8 +220,7 @@ export class GoogleSheetsStore {
 
   async append<T extends Record<string, unknown>>(table: string, row: T): Promise<T> {
     if (this.isDatabase) {
-      const model = modelMapping[table];
-      if (!model) throw new Error(`Unknown database model for table: ${table}`);
+      const model = await getPrismaModel(table);
       const data = toPrismaData(table, row);
       const created = await model.create({ data });
       return toRaw(created) as T;
@@ -231,8 +233,7 @@ export class GoogleSheetsStore {
 
   async upsert<T extends Record<string, unknown>>(table: string, row: T): Promise<T> {
     if (this.isDatabase) {
-      const model = modelMapping[table];
-      if (!model) throw new Error(`Unknown database model for table: ${table}`);
+      const model = await getPrismaModel(table);
       const data = toPrismaData(table, row);
       const id = String(data.id || "");
       const upserted = await model.upsert({

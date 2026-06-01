@@ -145,6 +145,7 @@ def main():
         ("source-camera", "CAMERA_AI", "Camera and AI detections", "demo"),
         ("source-visitors", "VISITOR_CSV", "Visitor pressure CSV", "demo"),
         ("source-weather", "OPEN_METEO", "Open-Meteo weather", "configured"),
+        ("source-gbif", "GBIF_OCCURRENCE", "GBIF species occurrences", "configured"),
     ]:
         workbook["DataSource"].append([
             source_id,

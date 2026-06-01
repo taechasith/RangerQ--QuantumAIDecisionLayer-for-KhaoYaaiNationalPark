@@ -25,9 +25,10 @@ function useSyncAction(endpoint: string) {
 export function SyncControls() {
   const [weatherState, runWeather] = useSyncAction("/api/sync/weather");
   const [firmsState, runFirms] = useSyncAction("/api/sync/firms");
+  const [gbifState, runGbif] = useSyncAction("/api/sync/gbif");
 
   return (
-    <div className="mt-6 grid gap-4 md:grid-cols-2 animate-slide-up delay-200 sm:gap-6">
+    <div className="mt-6 grid gap-4 lg:grid-cols-3 animate-slide-up delay-200 sm:gap-6">
       <div className="flex flex-col justify-between rounded-xl border border-zinc-900/90 bg-zinc-900/35 p-4 shadow-lg shadow-black/10 backdrop-blur-md sm:p-5">
         <div>
           <h2 className="text-base font-bold text-white">Open-Meteo Weather Sync</h2>
@@ -69,6 +70,29 @@ export function SyncControls() {
           {firmsState.message ? (
             <p className={`mt-3 text-xs font-semibold ${firmsState.status === "error" ? "text-red-400" : "text-emerald-400"}`}>
               {firmsState.message}
+            </p>
+          ) : null}
+        </div>
+      </div>
+
+      <div className="flex flex-col justify-between rounded-xl border border-zinc-900/90 bg-zinc-900/35 p-4 shadow-lg shadow-black/10 backdrop-blur-md sm:p-5">
+        <div>
+          <h2 className="text-base font-bold text-white">GBIF Species Sync</h2>
+          <p className="mt-1 text-xs text-zinc-400 leading-relaxed">
+            Imports open species occurrence records inside the Khao Yai bounding box.
+          </p>
+        </div>
+        <div>
+          <button
+            type="button"
+            onClick={() => void runGbif()}
+            className="mt-4 inline-flex h-10 w-full items-center justify-center rounded-xl border border-zinc-800 bg-zinc-900 px-5 text-xs font-bold text-white transition-colors hover:bg-zinc-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-400 cursor-pointer sm:w-auto"
+          >
+            Run GBIF Sync
+          </button>
+          {gbifState.message ? (
+            <p className={`mt-3 text-xs font-semibold ${gbifState.status === "error" ? "text-red-400" : "text-emerald-400"}`}>
+              {gbifState.message}
             </p>
           ) : null}
         </div>

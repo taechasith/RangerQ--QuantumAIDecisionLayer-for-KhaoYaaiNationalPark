@@ -20,11 +20,12 @@ export default async function SettingsPage() {
         <Card title="Google Sheets Integration" value={status.configured ? "Configured" : "Missing"} detail={status.apiUrl || "Set GOOGLE_SHEETS_API_URL"} />
         <Card title="Authentication Type" value="Demo admin" detail="Credentials are read from secure server configuration." />
       </div>
-      <div className="mt-4 grid gap-4 md:grid-cols-4 animate-slide-up delay-100">
+      <div className="mt-4 grid gap-4 md:grid-cols-5 animate-slide-up delay-100">
         <Card title="Satellite Fire Alerts" value={process.env.FIRMS_MAP_KEY ? "Active" : "Missing"} detail={process.env.FIRMS_MAP_KEY ? "Real-time thermal alerts enabled" : "Using baseline historical data"} />
         <Card title="Quantum Solver" value={process.env.QBRAID_API_KEY ? "Configured" : "Missing"} detail={process.env.QBRAID_API_KEY ? "Quantum simulator linked" : "Standard deterministic planner active"} />
         <Card title="Quantum Server URL" value={process.env.QBRAID_API_URL ? "Configured" : "Missing"} detail={process.env.QBRAID_API_URL ? "Connection endpoint enabled" : "Using local planning solver"} />
         <Card title="SMART File Import" value="Active" detail="Supports CSV and GeoJSON layout formats" />
+        <Card title="GBIF Species Data" value="Available" detail="Open biodiversity occurrence sync for Khao Yai" />
       </div>
       <div className="mt-6 rounded-xl border border-zinc-900 bg-zinc-900/20 backdrop-blur-md p-5 animate-slide-up delay-150">
         <h2 className="text-base font-bold text-white">Google Sheets Sync Details</h2>

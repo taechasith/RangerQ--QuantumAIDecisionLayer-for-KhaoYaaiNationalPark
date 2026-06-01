@@ -4,12 +4,12 @@ const adminEmail = process.env.DEMO_ADMIN_EMAIL || "creativelab.co.th@gmail.com"
 const adminPassword = process.env.DEMO_ADMIN_PASSWORD || "";
 
 const protectedPages = [
-  { path: "/dashboard", text: "Operations Dashboard" },
+  { path: "/dashboard", text: "Ranger Command Center" },
   { path: "/map", text: "Risk Map" },
-  { path: "/optimizer", text: "Optimization" },
+  { path: "/optimizer", text: "Smart Patrol Planner" },
   { path: "/imports", text: "Data Imports" },
-  { path: "/reports", text: "Reports" },
-  { path: "/settings", text: "Settings" },
+  { path: "/reports", text: "Daily Patrol Reports" },
+  { path: "/settings", text: "System Settings" },
 ];
 
 async function login(page: Page) {

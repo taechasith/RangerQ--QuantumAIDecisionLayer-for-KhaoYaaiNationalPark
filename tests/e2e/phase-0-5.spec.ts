@@ -52,9 +52,9 @@ test("login form does not expose credentials and rejects old defaults", async ({
 test("demo login opens dashboard", async ({ page }) => {
   await login(page);
 
-  await expect(page.getByRole("heading", { name: "Operations Dashboard" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Ranger Command Center" })).toBeVisible();
   await expect(page.getByText("Khao Yai Operations")).toBeVisible();
-  await expect(page.getByText("Data source freshness")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Live Data Sources" })).toBeVisible();
 });
 
 test("protected pages render phase 3-5 application surfaces", async ({ page }) => {
@@ -64,10 +64,10 @@ test("protected pages render phase 3-5 application surfaces", async ({ page }) =
 
   const pages = [
     ["/map", "Risk Map"],
-    ["/optimizer", "Optimization"],
+    ["/optimizer", "Smart Patrol Planner"],
     ["/imports", "Data Imports"],
-    ["/reports", "Reports"],
-    ["/settings", "Settings"],
+    ["/reports", "Daily Patrol Reports"],
+    ["/settings", "System Settings"],
   ] as const;
 
   for (const [path, heading] of pages) {
@@ -81,12 +81,12 @@ test("map page exposes phase 7 risk map controls and fallback table", async ({ p
   await page.goto("/map");
 
   await expect(page.getByRole("heading", { name: "Risk Map" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Fire Risk" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Wildlife Risk" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Combined Priority" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Patrol Plan" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Khao Yai risk layer" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Low-bandwidth zone table" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Fire Danger" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Wildlife Threat" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Overall Danger" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Patrol Route" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Khao Yai Interactive Map" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Zone Danger Summary" })).toBeVisible();
 });
 
 test("imports page exposes all phase 4 import paths", async ({ page }) => {
@@ -117,9 +117,10 @@ test("settings page exposes phase 5 sync controls", async ({ page }) => {
 
   await expect(page.getByRole("button", { name: "Run weather sync" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Run FIRMS sync" })).toBeVisible();
-  await expect(page.getByText("Google Apps Script database")).toBeVisible();
-  await expect(page.getByText("Real hotspot sync enabled")).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Audit log" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Run GBIF sync" })).toBeVisible();
+  await expect(page.getByText("Google Sheets Sync Details")).toBeVisible();
+  await expect(page.getByText("Real-time thermal alerts enabled")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "System Activity Log" })).toBeVisible();
 });
 
 test("dashboard can run phase 6 risk scoring", async ({ page }) => {
@@ -128,9 +129,9 @@ test("dashboard can run phase 6 risk scoring", async ({ page }) => {
   await login(page);
   await page.goto("/dashboard");
 
-  await expect(page.getByRole("button", { name: "Run risk scoring" })).toBeVisible();
-  await page.getByRole("button", { name: "Run risk scoring" }).click();
-  await expect(page.getByText(/Risk scoring complete for \d+ zones/)).toBeVisible({ timeout: 30_000 });
+  await expect(page.getByRole("button", { name: "Update Danger Levels" })).toBeVisible();
+  await page.getByRole("button", { name: "Update Danger Levels" }).click();
+  await expect(page.getByText(/Danger levels successfully updated for \d+ zones/)).toBeVisible({ timeout: 30_000 });
 });
 
 test("optimizer returns selected zones and QUBO payload", async ({ page }) => {
@@ -139,14 +140,14 @@ test("optimizer returns selected zones and QUBO payload", async ({ page }) => {
   await login(page);
   await page.goto("/optimizer");
 
-  await expect(page.getByRole("heading", { name: "Optimization" })).toBeVisible();
-  await page.getByRole("button", { name: "Run optimization" }).click();
+  await expect(page.getByRole("heading", { name: "Smart Patrol Planner" })).toBeVisible();
+  await page.getByRole("button", { name: "Generate Patrol Plan" }).click();
   await expect(page.getByText(/Optimization selected \d+ zones/)).toBeVisible({ timeout: 45_000 });
-  await expect(page.getByRole("heading", { name: "Selected patrol zones" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Ranger action plan" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "QUBO payload" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Recommended Patrol Zones" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Patrol Assignments & Tasking" })).toBeVisible();
+  await page.getByText("Advanced Technical Details").click();
   await expect(page.getByText("patrol_zone_selection")).toBeVisible();
-  await page.getByRole("button", { name: "Submit/log qBraid" }).click();
+  await page.getByRole("button", { name: "Run on Quantum Server" }).click();
   await expect(page.getByText(/Command: python scripts\/qbraid\/qbraid_submit.py/)).toBeVisible({ timeout: 45_000 });
 });
 
@@ -154,10 +155,10 @@ test("reports page generates daily action plan and export controls", async ({ pa
   await login(page);
   await page.goto("/reports");
 
-  await expect(page.getByRole("heading", { name: "Reports" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Daily patrol report" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Ranger action plan" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Top 5 patrol zones" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Daily Patrol Reports" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Operational Briefing Report" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Team Patrol Routes & Briefing" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Priority Threat Zones" })).toBeVisible();
   await expect(page.getByRole("link", { name: "Export CSV" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Print report" })).toBeVisible();
 });
@@ -183,6 +184,7 @@ test("import and sync APIs require authentication", async ({ request }) => {
     "/api/optimize/qbraid",
     "/api/sync/weather",
     "/api/sync/firms",
+    "/api/sync/gbif",
   ];
 
   for (const endpoint of endpoints) {
@@ -200,11 +202,11 @@ test("qBraid stays in safe fallback when credentials are missing", async ({ page
   await login(page);
   await page.goto("/optimizer");
 
-  await page.getByRole("button", { name: "Run optimization" }).click();
+  await page.getByRole("button", { name: "Generate Patrol Plan" }).click();
   await expect(page.getByText(/Optimization selected \d+ zones/)).toBeVisible({ timeout: 45_000 });
-  await page.getByRole("button", { name: "Submit/log qBraid" }).click();
+  await page.getByRole("button", { name: "Run on Quantum Server" }).click();
   await expect(page.getByText(/Command: python scripts\/qbraid\/qbraid_submit.py/)).toBeVisible({ timeout: 45_000 });
-  await expect(page.getByRole("button", { name: "Submit/log qBraid" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Run on Quantum Server" })).toBeVisible();
 });
 
 test("health endpoint returns backend and freshness JSON", async ({ request }) => {

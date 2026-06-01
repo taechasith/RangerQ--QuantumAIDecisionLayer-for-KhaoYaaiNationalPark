@@ -13,6 +13,7 @@ graph TD
     subgraph Data Sources
         FIRMS[NASA FIRMS <br/> Satellite Thermal Fire Alerts]
         Meteo[Open-Meteo <br/> Temperature, Humidity, Soil Moisture]
+        GBIF[GBIF <br/> Open Species Occurrences]
         SMART[SMART CSV Ingestion <br/> Ranger Patrol Logs & Threats]
         CamAI[Camera Trap AI <br/> Wildlife Species Detections]
         SheetDb[Google Sheets Data Backend]
@@ -39,6 +40,7 @@ graph TD
     %% Flow connections
     FIRMS --> Sync
     Meteo --> Sync
+    GBIF --> Sync
     SMART --> GStore
     CamAI --> Sync
     
@@ -66,6 +68,7 @@ graph TD
 - **🗺️ Interactive 3D Digital Twin Map**: Powered by `maplibre-gl`, visualizing boundaries, trails, evergreen forest blocks, water sources, and ranger stations with live heatmaps of fire hotspots and wildlife sightings.
 - **🛰️ Satellite-Driven Fire Monitoring**: Direct sync with the NASA FIRMS (Fire Information for Resource Management System) to plot near-real-time satellite thermal anomalies.
 - **🌤️ Hyper-Local Weather Integration**: Integration with the Open-Meteo API to record relative humidity, wind vectors, and surface-to-deep soil moisture levels per zone.
+- **Open Biodiversity Occurrences**: GBIF sync imports public species occurrence records within the Khao Yai bounding box as wildlife observations.
 - **📷 Camera Trap AI & Ranger Observation Ingestion**: Upload and process structured data representing wildlife distributions, patrol team observations, and threat categories.
 - **⚡ Spatiotemporal Risk Scoring**: A multi-criteria evaluation engine that computes zone-level fire and wildlife protection priorities based on real-time factors (e.g., proximity to water, soil dryness, wind gusts).
 - **⚛️ Quantum QUBO Optimization**: Formulation of the zone selection problem into a **Quadratic Unconstrained Binary Optimization (QUBO)** model, solvable using classical heuristics or quantum solvers on the **qBraid** network.
@@ -96,6 +99,9 @@ DEMO_ADMIN_PASSWORD="secure-password"
 
 # NASA FIRMS API (For syncing thermal fire data)
 FIRMS_MAP_KEY="your-nasa-firms-api-key"
+
+# GBIF public occurrence API (optional; no key required)
+GBIF_SYNC_LIMIT="75"
 
 # qBraid Quantum API
 QBRAID_API_URL="https://api.qbraid.com/..." # Leave blank to default to Local CLI worker
@@ -147,6 +153,10 @@ RangerQ relies on background sync processes to retrieve live external events:
 - **Sync Zone Weather**: Retrieves current meteorological metrics and soil details:
   ```bash
   pnpm sync:weather
+  ```
+- **Sync GBIF Species Occurrences**: Imports open biodiversity records inside the Khao Yai bounding box:
+  ```bash
+  pnpm sync:gbif
   ```
 
 ---
