@@ -10,7 +10,7 @@ type SheetResponse<T> = {
 };
 
 // Helper to convert Prisma objects to raw objects
-function toRaw(row: any): any {
+function toRaw(row: Record<string, unknown>): Record<string, unknown> {
   if (!row) return row;
   const result = { ...row };
   for (const [key, value] of Object.entries(result)) {
@@ -24,7 +24,7 @@ function toRaw(row: any): any {
 }
 
 // Helper to convert raw input to Prisma input schema
-function toPrismaData(table: string, row: any): any {
+function toPrismaData(table: string, row: Record<string, unknown>): Record<string, unknown> {
   const data = { ...row };
   
   // Clean internal properties not present in database schema
@@ -39,7 +39,7 @@ function toPrismaData(table: string, row: any): any {
   const dateFields = ["lastSyncedAt", "startedAt", "completedAt", "createdAt", "updatedAt", "timestamp", "date"];
   for (const field of dateFields) {
     if (data[field]) {
-      data[field] = new Date(data[field]);
+      data[field] = new Date(String(data[field]));
     }
   }
 
@@ -124,38 +124,49 @@ function toPrismaData(table: string, row: any): any {
 
   // Handle specific Enum fields mapping
   if (table === "Zone" && data.zoneType) {
-    data.zoneType = data.zoneType.toUpperCase();
+    data.zoneType = String(data.zoneType).toUpperCase();
   }
   if (table === "DataSource" && data.type) {
-    data.type = data.type.toUpperCase();
+    data.type = String(data.type).toUpperCase();
   }
   if (table === "RiskRun" && data.status) {
-    data.status = data.status.toUpperCase();
+    data.status = String(data.status).toUpperCase();
   }
   if (table === "ZoneRiskScore" && data.label) {
-    data.label = data.label.toUpperCase();
+    data.label = String(data.label).toUpperCase();
   }
   if (table === "OptimizationRun" && data.method) {
-    data.method = data.method.toUpperCase();
+    data.method = String(data.method).toUpperCase();
   }
 
   return data;
 }
 
-const modelMapping: Record<string, any> = {
-  Zone: prisma.zone,
-  DataSource: prisma.dataSource,
-  RiskRun: prisma.riskRun,
-  ZoneRiskScore: prisma.zoneRiskScore,
-  OptimizationRun: prisma.optimizationRun,
-  SelectedZone: prisma.selectedZone,
-  PatrolPlan: prisma.patrolPlan,
-  AuditLog: prisma.auditLog,
-  WeatherSnapshot: prisma.weatherSnapshot,
-  FireHotspot: prisma.fireHotspot,
-  CameraDetection: prisma.cameraDetection,
-  VisitorPressure: prisma.visitorPressure,
-  ManualNote: prisma.manualNote,
+type PrismaModelDelegate = {
+  findMany: () => Promise<Record<string, unknown>[]>;
+  findUnique: (args: { where: { id: string } }) => Promise<Record<string, unknown> | null>;
+  create: (args: { data: Record<string, unknown> }) => Promise<Record<string, unknown>>;
+  upsert: (args: {
+    where: { id: string };
+    update: Record<string, unknown>;
+    create: Record<string, unknown>;
+  }) => Promise<Record<string, unknown>>;
+};
+
+const modelMapping: Record<string, PrismaModelDelegate> = {
+  Zone: prisma.zone as unknown as PrismaModelDelegate,
+  DataSource: prisma.dataSource as unknown as PrismaModelDelegate,
+  RiskRun: prisma.riskRun as unknown as PrismaModelDelegate,
+  ZoneRiskScore: prisma.zoneRiskScore as unknown as PrismaModelDelegate,
+  OptimizationRun: prisma.optimizationRun as unknown as PrismaModelDelegate,
+  SelectedZone: prisma.selectedZone as unknown as PrismaModelDelegate,
+  PatrolPlan: prisma.patrolPlan as unknown as PrismaModelDelegate,
+  AuditLog: prisma.auditLog as unknown as PrismaModelDelegate,
+  WeatherSnapshot: prisma.weatherSnapshot as unknown as PrismaModelDelegate,
+  FireHotspot: prisma.fireHotspot as unknown as PrismaModelDelegate,
+  CameraDetection: prisma.cameraDetection as unknown as PrismaModelDelegate,
+  VisitorPressure: prisma.visitorPressure as unknown as PrismaModelDelegate,
+  ManualNote: prisma.manualNote as unknown as PrismaModelDelegate,
 };
 
 export class GoogleSheetsStore {

@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Trees, ArrowRight, Shield, Cpu, Activity, Map, ShieldAlert } from "lucide-react";
+import Image from "next/image";
+import { ArrowRight, Shield, Cpu, Activity, Map, ShieldAlert } from "lucide-react";
 import { DecisionCube } from "@/components/layout/DecisionCube";
 import { ThreeBackground } from "@/components/layout/ThreeBackground";
 
@@ -18,7 +19,6 @@ const loadingSteps = [
 export default function Home() {
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
-  const [loadingText, setLoadingText] = useState(loadingSteps[0]);
 
   // Loading simulation
   useEffect(() => {
@@ -39,18 +39,13 @@ export default function Home() {
     return () => clearInterval(progressInterval);
   }, [loading]);
 
-  // Update loading text based on progress
-  useEffect(() => {
-    const stepIndex = Math.min(
-      Math.floor((progress / 100) * loadingSteps.length),
-      loadingSteps.length - 1
-    );
-    setLoadingText(loadingSteps[stepIndex]);
-  }, [progress]);
+  const loadingText = loadingSteps[
+    Math.min(Math.floor((progress / 100) * loadingSteps.length), loadingSteps.length - 1)
+  ];
 
   return (
     <>
-      {/* 🚀 First-Time Entry Loader */}
+      {/* First-time entry loader */}
       {loading && (
         <div className="fixed inset-0 z-50 bg-zinc-950 flex flex-col items-center justify-center p-6 selection:bg-transparent">
           {/* Ambient Loader Glow */}
@@ -59,7 +54,7 @@ export default function Home() {
           <div className="relative text-center space-y-6 max-w-sm w-full">
             {/* Pulsing Core */}
             <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-zinc-900 border border-zinc-800 shadow-xl shadow-emerald-950/20 mx-auto animate-pulse p-2.5">
-              <img src="/RengerQ_logo.png" alt="RangerQ Logo" className="h-12 w-auto object-contain animate-bounce [animation-duration:2.5s]" />
+              <Image src="/RengerQ_logo.png" alt="RangerQ Logo" width={48} height={48} className="h-12 w-auto object-contain animate-bounce [animation-duration:2.5s]" />
             </div>
 
             <div className="space-y-2">
@@ -84,30 +79,31 @@ export default function Home() {
         </div>
       )}
 
-      {/* 🏠 Main Landing Page */}
+      {/* Main landing page */}
       <div className={`relative min-h-screen bg-zinc-950 text-zinc-100 selection:bg-emerald-500 selection:text-black overflow-hidden font-sans ${loading ? "opacity-0" : "opacity-100 transition-opacity duration-500"}`}>
         {/* Decorative Forest Ambient Glows */}
         <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-emerald-900/20 blur-[120px] pointer-events-none" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-cyan-900/10 blur-[120px] pointer-events-none" />
         <div className="absolute top-[30%] right-[10%] w-[300px] h-[300px] rounded-full bg-emerald-950/30 blur-[80px] pointer-events-none" />
 
-        {/* 🌌 Dynamic Three.js Quantum Particle Background */}
+        {/* Dynamic Three.js quantum particle background */}
         <ThreeBackground />
 
         {/* Header */}
         <header className="relative z-10 border-b border-zinc-900 bg-zinc-950/70 backdrop-blur-md animate-fade-in">
-          <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+          <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
             <div className="flex items-center gap-3">
-              <img src="/RengerQ_logo.png" alt="RangerQ Logo" className="h-9 w-auto object-contain" />
+              <Image src="/RengerQ_logo.png" alt="RangerQ Logo" width={40} height={40} className="h-9 w-auto object-contain" />
               <div>
                 <span className="text-lg font-extrabold tracking-tight text-white leading-none">RangerQ</span>
                 <span className="ml-2 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-zinc-900 text-zinc-400 border border-zinc-800">Khao Yai</span>
+                <span className="block text-[10px] font-bold uppercase tracking-[0.18em] text-zinc-500">Q Forest Twin</span>
               </div>
             </div>
-            <nav className="flex items-center gap-6">
+            <nav className="flex shrink-0 items-center gap-6">
               <Link
                 href="/dashboard"
-                className="inline-flex h-9 items-center justify-center rounded-xl bg-zinc-900 px-5 text-xs font-bold text-zinc-200 border border-zinc-800 hover:bg-zinc-800 hover:text-white transition-all cursor-pointer"
+                className="inline-flex h-9 items-center justify-center rounded-xl bg-zinc-900 px-5 text-xs font-bold text-zinc-200 border border-zinc-800 hover:bg-zinc-800 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-400 transition-all cursor-pointer"
               >
                 Sign In
               </Link>
@@ -116,7 +112,7 @@ export default function Home() {
         </header>
 
         {/* Hero Section */}
-        <main className="relative z-10 mx-auto max-w-6xl px-6 pt-12 pb-24 sm:pt-20">
+        <main className="relative z-10 mx-auto max-w-6xl px-4 pt-10 pb-16 sm:px-6 sm:pt-20 sm:pb-24">
           <div className="grid gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
             {/* Left Column: Text & CTAs */}
             <div className="space-y-6 text-center lg:text-left animate-slide-up delay-75">
@@ -126,7 +122,7 @@ export default function Home() {
                 Q-Forest Digital Twin
               </div>
 
-              <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-6xl leading-tight">
+              <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl leading-tight">
                 Quantum-Assisted <br />
                 <span className="bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 bg-clip-text text-transparent">
                   Decision Layer
@@ -134,31 +130,31 @@ export default function Home() {
               </h1>
 
               <p className="text-sm md:text-base text-zinc-400 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                Protecting Thailand's biodiversity through a real-time Spatiotemporal Digital Twin. 
+                Protecting Thailand&apos;s biodiversity through a real-time Spatiotemporal Digital Twin. 
                 Formulating ranger patrol optimization as a QUBO model solved on the qBraid platform.
               </p>
 
               <div className="pt-4 flex flex-col sm:flex-row justify-center lg:justify-start items-center gap-4">
                 <Link
                   href="/dashboard"
-                  className="group inline-flex h-12 w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 px-8 text-sm font-bold text-white shadow-lg shadow-emerald-950/50 hover:from-emerald-500 hover:to-teal-400 transition-all duration-300 cursor-pointer"
+                  className="group inline-flex h-12 w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 px-8 text-sm font-bold text-white shadow-lg shadow-emerald-950/50 hover:from-emerald-500 hover:to-teal-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-400 transition-all duration-300 cursor-pointer"
                 >
                   Open RangerQ
                   <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
                 <a
-                  href="https://github.com/taechasith/RangerQ--QuantumAIDecisionLayer-for-KhaoYaaiNationalPark"
+                  href="https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Ftaechasith%2FRangerQ--QuantumAIDecisionLayer-for-KhaoYaaiNationalPark"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex h-12 w-full sm:w-auto items-center justify-center rounded-xl border border-zinc-800 bg-zinc-900/30 px-6 text-sm font-bold text-zinc-300 hover:bg-zinc-900 hover:text-white transition-all duration-300"
+                  className="inline-flex h-12 w-full sm:w-auto items-center justify-center rounded-xl border border-zinc-800 bg-zinc-900/30 px-6 text-sm font-bold text-zinc-300 hover:bg-zinc-900 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-400 transition-all duration-300"
                 >
-                  GitHub Code
+                  Deploy Now
                 </a>
               </div>
             </div>
 
             {/* Right Column: Interactive Scrollable 3D Decision Cube */}
-            <div className="flex justify-center items-center animate-fade-in delay-150 relative">
+            <div className="relative flex min-h-[280px] items-center justify-center animate-fade-in delay-150 sm:min-h-[360px]">
               {/* Background circular radar layout behind cube */}
               <div className="absolute inset-0 bg-radial-[circle_at_center,rgba(16,185,129,0.03)_0%,transparent_60%] pointer-events-none" />
               <DecisionCube />
@@ -166,9 +162,9 @@ export default function Home() {
           </div>
 
           {/* Features Grid */}
-          <div className="mt-24 grid gap-6 sm:grid-cols-2 lg:grid-cols-4 animate-slide-up delay-200">
+          <div className="mt-16 grid gap-4 sm:grid-cols-2 lg:mt-24 lg:grid-cols-4 animate-slide-up delay-200">
             {/* Card 1 */}
-            <div className="group relative rounded-2xl border border-zinc-900 bg-zinc-900/20 p-6 hover:border-emerald-500/30 hover:bg-zinc-900/40 transition-all duration-350 hover:-translate-y-1">
+            <div className="group relative rounded-xl border border-zinc-900 bg-zinc-900/30 p-5 hover:border-emerald-500/30 hover:bg-zinc-900/50 transition-all duration-300">
               <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-950/50 text-emerald-400 border border-emerald-900/30 group-hover:bg-emerald-900 group-hover:text-emerald-200 transition-colors">
                 <Map className="h-5 w-5" />
               </div>
@@ -179,7 +175,7 @@ export default function Home() {
             </div>
 
             {/* Card 2 */}
-            <div className="group relative rounded-2xl border border-zinc-900 bg-zinc-900/20 p-6 hover:border-teal-500/30 hover:bg-zinc-900/40 transition-all duration-350 hover:-translate-y-1">
+            <div className="group relative rounded-xl border border-zinc-900 bg-zinc-900/30 p-5 hover:border-teal-500/30 hover:bg-zinc-900/50 transition-all duration-300">
               <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-teal-950/50 text-teal-400 border border-teal-900/30 group-hover:bg-teal-900 group-hover:text-teal-200 transition-colors">
                 <Activity className="h-5 w-5" />
               </div>
@@ -190,7 +186,7 @@ export default function Home() {
             </div>
 
             {/* Card 3 */}
-            <div className="group relative rounded-2xl border border-zinc-900 bg-zinc-900/20 p-6 hover:border-indigo-500/30 hover:bg-zinc-900/40 transition-all duration-350 hover:-translate-y-1">
+            <div className="group relative rounded-xl border border-zinc-900 bg-zinc-900/30 p-5 hover:border-indigo-500/30 hover:bg-zinc-900/50 transition-all duration-300">
               <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-950/50 text-indigo-400 border border-indigo-900/30 group-hover:bg-indigo-900 group-hover:text-indigo-200 transition-colors">
                 <Cpu className="h-5 w-5" />
               </div>
@@ -201,7 +197,7 @@ export default function Home() {
             </div>
 
             {/* Card 4 */}
-            <div className="group relative rounded-2xl border border-zinc-900 bg-zinc-900/20 p-6 hover:border-emerald-500/30 hover:bg-zinc-900/40 transition-all duration-350 hover:-translate-y-1">
+            <div className="group relative rounded-xl border border-zinc-900 bg-zinc-900/30 p-5 hover:border-emerald-500/30 hover:bg-zinc-900/50 transition-all duration-300">
               <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-950/50 text-emerald-400 border border-emerald-900/30 group-hover:bg-emerald-900 group-hover:text-emerald-200 transition-colors">
                 <ShieldAlert className="h-5 w-5" />
               </div>
@@ -215,10 +211,10 @@ export default function Home() {
 
         {/* Footer */}
         <footer className="relative z-10 border-t border-zinc-900 bg-zinc-950 py-10 mt-12 animate-fade-in">
-          <div className="mx-auto max-w-6xl px-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-zinc-500">
+          <div className="mx-auto max-w-6xl px-4 sm:px-6 flex flex-col md:flex-row items-center justify-between gap-4 text-center text-xs text-zinc-500 md:text-left">
             <div className="flex items-center gap-2">
               <Shield className="h-4 w-4 text-emerald-500" />
-              <span>RangerQ Protected Area Planner — Khao Yai National Park</span>
+              <span>RangerQ Protected Area Planner - Khao Yai National Park</span>
             </div>
             <div>
               &copy; {new Date().getFullYear()} Q-Forest-Twin. All rights reserved.

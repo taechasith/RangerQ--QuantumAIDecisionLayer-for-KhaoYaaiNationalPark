@@ -1,8 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import {
-  BarChart,
   Bar,
   XAxis,
   YAxis,
@@ -21,27 +19,26 @@ type ChartDataPoint = {
   "Combined Priority": number;
 };
 
+type ZoneLike = {
+  code: string;
+  baseFireRisk: number;
+  baseWildlifeRisk: number;
+};
+
+type RiskScoreLike = {
+  zoneCode: string;
+  fireRisk: number;
+  wildlifeRisk: number;
+  combinedPriority: number;
+};
+
 export function RiskChart({
   zones,
   riskScores
 }: {
-  zones: any[];
-  riskScores: any[];
+  zones: ZoneLike[];
+  riskScores: RiskScoreLike[];
 }) {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
-    return (
-      <div className="h-80 w-full animate-pulse bg-zinc-900/20 rounded-xl border border-zinc-900 flex items-center justify-center text-xs text-zinc-500">
-        Loading analytics engine...
-      </div>
-    );
-  }
-
   // Build chart dataset
   const hasRiskScores = riskScores.length > 0;
   const chartData: ChartDataPoint[] = (hasRiskScores ? riskScores : zones)
@@ -63,11 +60,11 @@ export function RiskChart({
     });
 
   return (
-    <div className="h-80 w-full">
+    <div className="h-[22rem] w-full sm:h-80">
       <ResponsiveContainer width="100%" height="100%">
         <ComposedChart
           data={chartData}
-          margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
+          margin={{ top: 10, right: 8, left: -18, bottom: 0 }}
         >
           <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" vertical={false} />
           <XAxis 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Trees, Zap, Map, ShieldAlert, Cpu, Activity } from "lucide-react";
+import { Trees, Zap, Map, ShieldAlert, Cpu, Activity, MousePointer2 } from "lucide-react";
 
 export function DecisionCube() {
   const cubeRef = useRef<HTMLDivElement | null>(null);
@@ -13,7 +13,7 @@ export function DecisionCube() {
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
-      setRotation((prev) => ({
+      setRotation(() => ({
         x: -20 - scrollY * 0.1,
         y: 35 + scrollY * 0.15,
       }));
@@ -72,10 +72,10 @@ export function DecisionCube() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center p-4">
+    <div className="flex flex-col items-center justify-center p-2 sm:p-4">
       {/* 3D Scene viewport */}
       <div 
-        className="perspective-1000 h-[280px] w-[280px] md:h-[340px] md:w-[340px] flex items-center justify-center cursor-grab active:cursor-grabbing select-none"
+        className="perspective-1000 flex h-[260px] w-[260px] touch-pan-y items-center justify-center cursor-grab select-none active:cursor-grabbing sm:h-[320px] sm:w-[320px] md:h-[340px] md:w-[340px]"
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
@@ -87,7 +87,7 @@ export function DecisionCube() {
         {/* Cube container */}
         <div
           ref={cubeRef}
-          className="preserve-3d relative h-48 w-48 md:h-56 md:w-56 transition-transform duration-100 ease-out [--cube-half:96px] md:[--cube-half:112px]"
+          className="preserve-3d relative h-44 w-44 transition-transform duration-100 ease-out [--cube-half:88px] sm:h-52 sm:w-52 sm:[--cube-half:104px] md:h-56 md:w-56 md:[--cube-half:112px]"
           style={{
             transform: `rotateX(${rotation.x}deg) rotateY(${rotation.y}deg)`,
           }}
@@ -171,8 +171,9 @@ export function DecisionCube() {
           </div>
         </div>
       </div>
-      <p className="text-[10px] text-zinc-500 mt-2 flex items-center gap-1.5 animate-pulse select-none pointer-events-none">
-        <span>🖱️ Drag to rotate / Scroll page to spin</span>
+      <p className="mt-2 flex items-center gap-1.5 text-[10px] text-zinc-500 select-none pointer-events-none">
+        <MousePointer2 className="h-3 w-3" />
+        <span>Drag to rotate / scroll page to spin</span>
       </p>
     </div>
   );

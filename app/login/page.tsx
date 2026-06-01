@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 import { loginAction } from "@/app/actions";
 
@@ -10,14 +11,14 @@ export default async function LoginPage({
   const params = await searchParams;
 
   return (
-    <main className="relative flex min-h-screen items-center justify-center bg-zinc-950 px-6 py-12 overflow-hidden">
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-zinc-950 px-4 py-10 sm:px-6 sm:py-12">
       {/* Decorative Forest Ambient Glows */}
       <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-emerald-900/20 blur-[120px] pointer-events-none" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-cyan-900/10 blur-[120px] pointer-events-none" />
 
-      <div className="relative z-10 w-full max-w-md rounded-xl border border-zinc-900 bg-zinc-900/20 backdrop-blur-md p-6 shadow-xl">
+      <div className="relative z-10 w-full max-w-md rounded-xl border border-zinc-900/90 bg-zinc-900/35 p-5 shadow-2xl shadow-black/30 backdrop-blur-md sm:p-6">
         <div className="flex items-center gap-3">
-          <img src="/RengerQ_logo.png" alt="RangerQ Logo" className="h-8 w-auto object-contain" />
+          <Image src="/RengerQ_logo.png" alt="RangerQ Logo" width={36} height={36} className="h-8 w-auto object-contain" />
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-400">RangerQ</p>
         </div>
         <h1 className="mt-4 text-2xl font-extrabold tracking-tight text-white">Sign In to Operations</h1>
@@ -38,7 +39,7 @@ export default async function LoginPage({
               name="email"
               type="email"
               autoComplete="username"
-              className="mt-1.5 w-full rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-2.5 text-xs text-white focus:outline-none focus:border-zinc-700"
+              className="mt-1.5 w-full rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-3 text-sm text-white focus:outline-none focus:border-emerald-500"
               required
             />
           </label>
@@ -48,13 +49,13 @@ export default async function LoginPage({
               name="password"
               type="password"
               autoComplete="current-password"
-              className="mt-1.5 w-full rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-2.5 text-xs text-white focus:outline-none focus:border-zinc-700"
+              className="mt-1.5 w-full rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-3 text-sm text-white focus:outline-none focus:border-emerald-500"
               required
             />
           </label>
           <button
             type="submit"
-            className="w-full inline-flex h-10 items-center justify-center rounded-xl bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white shadow-lg cursor-pointer transition-colors"
+            className="inline-flex h-11 w-full items-center justify-center rounded-xl bg-emerald-600 text-xs font-bold text-white shadow-lg transition-colors hover:bg-emerald-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-400 cursor-pointer"
           >
             Sign In
           </button>

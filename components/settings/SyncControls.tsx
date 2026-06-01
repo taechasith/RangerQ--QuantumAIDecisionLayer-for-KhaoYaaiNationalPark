@@ -27,8 +27,8 @@ export function SyncControls() {
   const [firmsState, runFirms] = useSyncAction("/api/sync/firms");
 
   return (
-    <div className="mt-6 grid gap-6 md:grid-cols-2 animate-slide-up delay-200">
-      <div className="rounded-xl border border-zinc-900 bg-zinc-900/20 backdrop-blur-md p-5 flex flex-col justify-between">
+    <div className="mt-6 grid gap-4 md:grid-cols-2 animate-slide-up delay-200 sm:gap-6">
+      <div className="flex flex-col justify-between rounded-xl border border-zinc-900/90 bg-zinc-900/35 p-4 shadow-lg shadow-black/10 backdrop-blur-md sm:p-5">
         <div>
           <h2 className="text-base font-bold text-white">Open-Meteo Weather Sync</h2>
           <p className="mt-1 text-xs text-zinc-400 leading-relaxed">
@@ -39,7 +39,7 @@ export function SyncControls() {
           <button
             type="button"
             onClick={() => void runWeather()}
-            className="mt-4 inline-flex h-9 items-center justify-center rounded-xl bg-zinc-900 hover:bg-zinc-800 text-xs font-bold text-white px-5 border border-zinc-800 cursor-pointer transition-colors"
+            className="mt-4 inline-flex h-10 w-full items-center justify-center rounded-xl border border-zinc-800 bg-zinc-900 px-5 text-xs font-bold text-white transition-colors hover:bg-zinc-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-400 cursor-pointer sm:w-auto"
           >
             Run Weather Sync
           </button>
@@ -51,18 +51,18 @@ export function SyncControls() {
         </div>
       </div>
 
-      <div className="rounded-xl border border-zinc-900 bg-zinc-900/20 backdrop-blur-md p-5 flex flex-col justify-between">
+      <div className="flex flex-col justify-between rounded-xl border border-zinc-900/90 bg-zinc-900/35 p-4 shadow-lg shadow-black/10 backdrop-blur-md sm:p-5">
         <div>
           <h2 className="text-base font-bold text-white">NASA FIRMS Sync</h2>
           <p className="mt-1 text-xs text-zinc-400 leading-relaxed">
-            Retrieves near-real-time active thermal hotspots using Khao Yai's geographic bounding box.
+            Retrieves near-real-time active thermal hotspots using Khao Yai&apos;s geographic bounding box.
           </p>
         </div>
         <div>
           <button
             type="button"
             onClick={() => void runFirms()}
-            className="mt-4 inline-flex h-9 items-center justify-center rounded-xl bg-zinc-900 hover:bg-zinc-800 text-xs font-bold text-white px-5 border border-zinc-800 cursor-pointer transition-colors"
+            className="mt-4 inline-flex h-10 w-full items-center justify-center rounded-xl border border-zinc-800 bg-zinc-900 px-5 text-xs font-bold text-white transition-colors hover:bg-zinc-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-400 cursor-pointer sm:w-auto"
           >
             Run FIRMS Sync
           </button>

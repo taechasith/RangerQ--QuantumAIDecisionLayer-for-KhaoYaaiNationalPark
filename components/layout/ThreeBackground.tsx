@@ -11,6 +11,7 @@ export function ThreeBackground() {
   useEffect(() => {
     if (!containerRef.current) return;
 
+    const container = containerRef.current;
     const width = window.innerWidth;
     const height = window.innerHeight;
 
@@ -26,7 +27,7 @@ export function ThreeBackground() {
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    containerRef.current.appendChild(renderer.domElement);
+    container.appendChild(renderer.domElement);
 
     // 3. Create Circular Particle Texture
     const canvas = document.createElement("canvas");
@@ -123,7 +124,7 @@ export function ThreeBackground() {
     window.addEventListener("resize", handleResize, { passive: true });
 
     // 7. Animation Loop
-    let clock = new THREE.Clock();
+    const clock = new THREE.Clock();
     let animationFrameId: number;
 
     const animate = () => {
@@ -173,8 +174,8 @@ export function ThreeBackground() {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("resize", handleResize);
 
-      if (containerRef.current && renderer.domElement.parentNode) {
-        containerRef.current.removeChild(renderer.domElement);
+      if (renderer.domElement.parentNode === container) {
+        container.removeChild(renderer.domElement);
       }
 
       geometry.dispose();

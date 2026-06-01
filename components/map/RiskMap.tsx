@@ -39,7 +39,7 @@ function popupHtml(properties: RiskMapZone & { score: number }) {
     <div style="font-family: Arial, sans-serif; min-width: 220px;">
       <div style="font-weight: 700; color: #18181b;">${properties.code}</div>
       <div style="margin-top: 2px; color: #52525b;">${properties.name}</div>
-      <div style="margin-top: 8px; font-weight: 700;">Score ${properties.score} · ${properties.label}</div>
+      <div style="margin-top: 8px; font-weight: 700;">Score ${properties.score} - ${properties.label}</div>
       <div style="margin-top: 8px; color: #3f3f46;">${action}</div>
     </div>
   `;
@@ -187,15 +187,15 @@ export function RiskMap({
   return (
     <div className="space-y-6 animate-fade-in">
       {/* Control Panel */}
-      <section className="rounded-xl border border-zinc-900 bg-zinc-900/20 backdrop-blur-md p-5 animate-slide-up delay-75">
+      <section className="rounded-xl border border-zinc-900/90 bg-zinc-900/35 p-4 shadow-lg shadow-black/10 backdrop-blur-md animate-slide-up delay-75 sm:p-5">
         <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
-          <div className="flex flex-wrap gap-2">
+          <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
             {layers.map((item) => (
               <button
                 key={item.id}
                 type="button"
                 onClick={() => setLayer(item.id)}
-                className={`rounded-xl border px-4 py-2.5 text-xs font-bold transition-all cursor-pointer ${
+                className={`rounded-xl border px-3 py-2.5 text-xs font-bold transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-400 cursor-pointer sm:px-4 ${
                   layer === item.id
                     ? "border-emerald-500 bg-emerald-500/10 text-emerald-400"
                     : "border-zinc-800 bg-zinc-950 text-zinc-400 hover:border-zinc-700 hover:text-white"
@@ -205,7 +205,7 @@ export function RiskMap({
               </button>
             ))}
           </div>
-          <div className="grid gap-4 sm:grid-cols-[minmax(220px,1fr)_180px_auto_auto] sm:items-end">
+          <div className="grid gap-4 md:grid-cols-[minmax(220px,1fr)_180px] xl:grid-cols-[minmax(220px,1fr)_180px_auto_auto] xl:items-end">
             <label className="text-xs font-bold uppercase tracking-wider text-zinc-400">
               Risk threshold: <span className="ml-1 text-white font-extrabold text-sm">{threshold}</span>
               <input
@@ -221,7 +221,7 @@ export function RiskMap({
             <label className="text-xs font-bold uppercase tracking-wider text-zinc-400">
               Zone type
               <select
-                className="mt-2.5 w-full rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-2.5 text-xs font-semibold text-white focus:outline-none focus:border-zinc-750"
+                className="mt-2.5 w-full rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-2.5 text-xs font-semibold text-white focus:outline-none focus:border-emerald-500"
                 value={zoneType}
                 onChange={(event) => setZoneType(event.target.value)}
               >
@@ -232,13 +232,13 @@ export function RiskMap({
             </label>
             <Link 
               href="/dashboard" 
-              className="inline-flex h-10 items-center justify-center rounded-xl bg-emerald-600 px-5 text-center text-xs font-bold text-white shadow-lg shadow-emerald-950/30 hover:bg-emerald-500 transition-colors"
+              className="inline-flex h-10 items-center justify-center rounded-xl bg-emerald-600 px-5 text-center text-xs font-bold text-white shadow-lg shadow-emerald-950/30 hover:bg-emerald-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-400 transition-colors"
             >
               Run Risk Scoring
             </Link>
             <Link 
               href="/optimizer" 
-              className="inline-flex h-10 items-center justify-center rounded-xl border border-zinc-800 bg-zinc-900/40 px-5 text-center text-xs font-bold text-zinc-300 hover:bg-zinc-900 hover:text-white transition-all"
+              className="inline-flex h-10 items-center justify-center rounded-xl border border-zinc-800 bg-zinc-900/40 px-5 text-center text-xs font-bold text-zinc-300 hover:bg-zinc-900 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-400 transition-all"
             >
               Run Optimization
             </Link>
@@ -248,12 +248,12 @@ export function RiskMap({
 
       {/* Map & Detail Cards */}
       <section className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_360px] animate-slide-up delay-100">
-        <div className="overflow-hidden rounded-xl border border-zinc-900 bg-zinc-900/20 backdrop-blur-md">
-          <div className="flex items-center justify-between border-b border-zinc-900 px-5 py-4">
+        <div className="overflow-hidden rounded-xl border border-zinc-900/90 bg-zinc-900/35 shadow-lg shadow-black/10 backdrop-blur-md">
+          <div className="flex flex-col gap-1 border-b border-zinc-900 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-5">
             <h2 className="text-base font-bold text-white">Khao Yai Risk Layer</h2>
             <span className="text-xs font-bold text-zinc-500">{featureCollection.features.length} zones visible</span>
           </div>
-          <div className="relative h-[560px] min-h-[420px]">
+          <div className="relative h-[420px] min-h-[360px] sm:h-[520px] xl:h-[560px]">
             <div ref={mapContainerRef} className="absolute inset-0" aria-label="Khao Yai risk map" />
             {mapError ? (
               <div className="absolute inset-0 grid place-items-center bg-zinc-950/95 p-6 text-center">
@@ -267,7 +267,7 @@ export function RiskMap({
           </div>
         </div>
 
-        <aside className="rounded-xl border border-zinc-900 bg-zinc-900/20 backdrop-blur-md flex flex-col max-h-[618px]">
+        <aside className="flex max-h-[520px] flex-col rounded-xl border border-zinc-900/90 bg-zinc-900/35 shadow-lg shadow-black/10 backdrop-blur-md xl:max-h-[618px]">
           <div className="border-b border-zinc-900 px-5 py-4 shrink-0">
             <h2 className="text-base font-bold text-white">Selected Layer Details</h2>
             <p className="mt-1 text-xs text-zinc-400 leading-relaxed">
@@ -331,7 +331,7 @@ export function RiskMap({
 
       {zones.some((zone) => zone.isSynthetic) ? (
         <p className="rounded-xl border border-amber-500/20 bg-amber-950/10 px-5 py-4 text-xs font-medium text-amber-400 leading-relaxed">
-          ⚠️ Demo zones are synthetic. Replace with official park GIS data before operational use.
+          Warning: demo zones are synthetic. Replace with official park GIS data before operational use.
         </p>
       ) : null}
     </div>

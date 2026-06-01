@@ -69,42 +69,40 @@ export function ImportWorkspace() {
   }
 
   return (
-    <div className="grid gap-6 lg:grid-cols-2 animate-fade-in">
+    <div className="grid gap-4 lg:grid-cols-2 animate-fade-in sm:gap-6">
       {uploadCards.map((card, index) => {
         const state = states[card.endpoint] || { status: "idle", message: "" };
         const delayClass = index === 0 ? "delay-75" : index === 1 ? "delay-100" : "delay-150";
         return (
           <form
             key={card.endpoint}
-            className={`rounded-xl border border-zinc-900 bg-zinc-900/20 backdrop-blur-md p-5 flex flex-col justify-between animate-slide-up ${delayClass}`}
+            className={`flex flex-col justify-between rounded-xl border border-zinc-900/90 bg-zinc-900/35 p-4 shadow-lg shadow-black/10 backdrop-blur-md animate-slide-up sm:p-5 ${delayClass}`}
             onSubmit={(event) => {
               event.preventDefault();
               const file = new FormData(event.currentTarget).get("file");
               void upload(card.endpoint, file instanceof File ? file : undefined);
             }}
           >
-            <div>
-              <h2 className="text-base font-bold text-white">{card.title}</h2>
-              <p className="mt-1 text-xs text-zinc-400 leading-relaxed">{card.description}</p>
-            </div>
+            <h2 className="text-base font-bold text-white">{card.title}</h2>
+            <p className="mt-1 text-xs text-zinc-400 leading-relaxed">{card.description}</p>
             <div className="mt-4 space-y-3">
-              <div className="flex flex-col gap-3 sm:flex-row">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
                 <input
                   name="file"
                   type="file"
                   aria-label={card.fileLabel}
                   accept=".csv,text/csv"
-                  className="w-full rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-2 text-xs font-semibold text-zinc-300 focus:outline-none file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-[10px] file:font-bold file:bg-zinc-900 file:text-zinc-200 file:cursor-pointer hover:file:bg-zinc-800"
+                  className="w-full rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-2 text-xs font-semibold text-zinc-300 focus:outline-none focus:border-emerald-500 file:mr-4 file:rounded-lg file:border-0 file:bg-zinc-900 file:px-3 file:py-1 file:text-[10px] file:font-bold file:text-zinc-200 file:cursor-pointer hover:file:bg-zinc-800"
                 />
                 <button 
-                  className="inline-flex h-9 items-center justify-center rounded-xl bg-zinc-900 hover:bg-zinc-800 text-xs font-bold text-white px-5 border border-zinc-800 cursor-pointer transition-colors" 
+                  className="inline-flex h-10 w-full items-center justify-center rounded-xl border border-zinc-800 bg-zinc-900 px-5 text-xs font-bold text-white transition-colors hover:bg-zinc-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-400 cursor-pointer sm:w-auto" 
                   type="submit"
                 >
                   Upload
                 </button>
               </div>
-              <div className="flex items-center justify-between pt-1">
-                <a className="text-xs font-bold text-emerald-400 hover:text-emerald-350 transition-colors" href={card.sample}>
+              <div className="flex flex-col gap-2 pt-1 sm:flex-row sm:items-center sm:justify-between">
+                <a className="text-xs font-bold text-emerald-400 hover:text-emerald-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-400 transition-colors" href={card.sample}>
                   Download sample CSV
                 </a>
                 {state.message ? (
@@ -117,7 +115,7 @@ export function ImportWorkspace() {
       })}
 
       <form
-        className="rounded-xl border border-zinc-900 bg-zinc-900/20 backdrop-blur-md p-5 animate-slide-up delay-200"
+        className="rounded-xl border border-zinc-900/90 bg-zinc-900/35 p-4 shadow-lg shadow-black/10 backdrop-blur-md animate-slide-up delay-200 sm:p-5"
         action={(formData) => {
           void submitNote(formData);
         }}
@@ -125,14 +123,14 @@ export function ImportWorkspace() {
         <h2 className="text-base font-bold text-white">Manual Ranger Note</h2>
         <p className="mt-1 text-xs text-zinc-400 leading-relaxed">Log field anomalies or threat sightings directly to Khao Yai operations backend.</p>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
-          <input name="zoneCode" placeholder="Zone Code (e.g. KY-BND-02)" className="rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-2 text-xs font-semibold text-white focus:outline-none focus:border-zinc-700" />
-          <input name="category" placeholder="Category (e.g. fire, threat)" className="rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-2 text-xs font-semibold text-white focus:outline-none focus:border-zinc-700" required />
-          <input name="severity" type="number" min="1" max="5" defaultValue="3" className="rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-2 text-xs font-semibold text-white focus:outline-none focus:border-zinc-700" />
-          <input name="author" placeholder="Ranger Name" className="rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-2 text-xs font-semibold text-white focus:outline-none focus:border-zinc-700" />
-          <textarea name="note" placeholder="Write operational note..." className="min-h-24 rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-2 text-xs font-semibold text-white focus:outline-none focus:border-zinc-700 sm:col-span-2" required />
+          <input name="zoneCode" placeholder="Zone Code (e.g. KY-BND-02)" className="rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-2.5 text-xs font-semibold text-white focus:outline-none focus:border-emerald-500" />
+          <input name="category" placeholder="Category (e.g. fire, threat)" className="rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-2.5 text-xs font-semibold text-white focus:outline-none focus:border-emerald-500" required />
+          <input name="severity" type="number" min="1" max="5" defaultValue="3" className="rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-2.5 text-xs font-semibold text-white focus:outline-none focus:border-emerald-500" />
+          <input name="author" placeholder="Ranger Name" className="rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-2.5 text-xs font-semibold text-white focus:outline-none focus:border-emerald-500" />
+          <textarea name="note" placeholder="Write operational note..." className="min-h-28 rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-2.5 text-xs font-semibold text-white focus:outline-none focus:border-emerald-500 sm:col-span-2" required />
         </div>
-        <div className="mt-4 flex items-center justify-between gap-4">
-          <button className="inline-flex h-10 items-center justify-center rounded-xl bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white px-6 shadow-lg shadow-emerald-950/20 cursor-pointer transition-colors" type="submit">
+        <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <button className="inline-flex h-11 w-full items-center justify-center rounded-xl bg-emerald-600 px-6 text-xs font-bold text-white shadow-lg shadow-emerald-950/20 transition-colors hover:bg-emerald-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-400 cursor-pointer sm:w-auto" type="submit">
             Save Note
           </button>
           {noteState.message ? (

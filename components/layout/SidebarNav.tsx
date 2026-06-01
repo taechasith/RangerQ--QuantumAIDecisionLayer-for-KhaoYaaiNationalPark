@@ -25,7 +25,7 @@ export function SidebarNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="space-y-1.5">
+    <nav className="space-y-1.5" aria-label="Primary navigation">
       {navItems.map((item) => {
         const Icon = item.icon;
         const isActive = pathname === item.href;
@@ -33,7 +33,7 @@ export function SidebarNav() {
           <Link
             key={item.href}
             href={item.href}
-            className={`group flex items-center justify-between rounded-xl px-4 py-3 text-sm font-semibold transition-all duration-200 cursor-pointer ${
+            className={`group flex items-center justify-between rounded-xl px-4 py-3 text-sm font-semibold transition-all duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-400 cursor-pointer ${
               isActive
                 ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
                 : "text-zinc-400 hover:bg-zinc-900 hover:text-zinc-100 border border-transparent"
@@ -59,7 +59,7 @@ export function MobileNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="mt-3 flex gap-2 overflow-x-auto lg:hidden py-1">
+    <nav className="mt-3 flex gap-2 overflow-x-auto pb-1 pt-1 lg:hidden" aria-label="Mobile primary navigation">
       {navItems.map((item) => {
         const Icon = item.icon;
         const isActive = pathname === item.href;
@@ -67,7 +67,7 @@ export function MobileNav() {
           <Link
             key={item.href}
             href={item.href}
-            className={`flex items-center gap-2 shrink-0 rounded-full px-4 py-2 text-xs font-bold transition-all border cursor-pointer ${
+            className={`flex shrink-0 items-center gap-2 rounded-full border px-3.5 py-2 text-xs font-bold transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-400 cursor-pointer sm:px-4 ${
               isActive
                 ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"
                 : "bg-zinc-900/40 text-zinc-400 border-zinc-900 hover:bg-zinc-900 hover:text-zinc-200"
