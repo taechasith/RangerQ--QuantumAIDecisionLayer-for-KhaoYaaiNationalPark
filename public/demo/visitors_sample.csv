@@ -1,0 +1,3 @@
+date,zone_code,visitor_count,vehicle_count,bus_count,source,notes
+2026-05-31,KY-VIS-05,1200,300,20,manual_gate_count,Weekend visitor pressure
+2026-05-31,KY-TRL-04,180,40,0,manual_trail_estimate,High trail usage

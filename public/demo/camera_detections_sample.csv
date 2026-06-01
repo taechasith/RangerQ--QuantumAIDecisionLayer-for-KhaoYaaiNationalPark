@@ -1,0 +1,3 @@
+camera_id,timestamp,lat,lng,species,count,confidence,image_url,notes
+CAM-07,2026-05-31T02:30:00+07:00,14.421,101.395,elephant,3,0.91,,Boundary camera detection
+CAM-12,2026-05-31T04:10:00+07:00,14.460,101.410,gaur,2,0.87,,Late-night movement

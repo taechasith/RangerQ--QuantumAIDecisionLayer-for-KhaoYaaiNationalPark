@@ -1,0 +1,372 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum ZoneType {
+  BOUNDARY
+  TRAIL
+  FOREST
+  ROAD
+  VILLAGE_EDGE
+  VISITOR_AREA
+  RANGER_STATION
+  WATER_SOURCE
+}
+
+enum DataSourceType {
+  SMART_EXPORT
+  SMART_CONNECT
+  CAMERA_AI
+  VISITOR_CSV
+  NASA_FIRMS
+  OPEN_METEO
+  MANUAL_NOTE
+  DRONE_HOTSPOT
+}
+
+enum RiskRunStatus {
+  PENDING
+  RUNNING
+  SUCCESS
+  FAILED
+}
+
+enum OptimizationMethod {
+  GREEDY
+  LOCAL_SEARCH
+  QBRAID_QUBO
+  HYBRID
+}
+
+enum ObservationEventType {
+  THREAT
+  WILDLIFE
+  PATROL
+  INCIDENT
+  RESOURCE
+  OTHER
+}
+
+enum RiskLabel {
+  LOW
+  MEDIUM
+  HIGH
+  SEVERE
+}
+
+model User {
+  id           String     @id @default(cuid())
+  email        String     @unique
+  name         String?
+  passwordHash String
+  role         String     @default("ADMIN")
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  auditLogs    AuditLog[]
+}
+
+model Park {
+  id          String       @id @default(cuid())
+  name        String
+  country     String       @default("Thailand")
+  timezone    String       @default("Asia/Bangkok")
+  boundaryGeojson Json?
+  notes       String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  zones       Zone[]
+  dataSources DataSource[]
+}
+
+model Zone {
+  id                       String            @id @default(cuid())
+  parkId                   String
+  code                     String            @unique
+  name                     String
+  zoneType                 ZoneType
+  geometryGeojson          Json
+  centroidLat              Float
+  centroidLng              Float
+  areaHectares             Float
+  baseFireRisk             Float             @default(0)
+  baseWildlifeRisk         Float             @default(0)
+  accessDifficulty         Float             @default(0)
+  rangerStationDistanceKm  Float             @default(0)
+  isSynthetic              Boolean           @default(true)
+  notes                    String?
+  createdAt                DateTime          @default(now())
+  updatedAt                DateTime          @updatedAt
+  park                     Park              @relation(fields: [parkId], references: [id], onDelete: Cascade)
+  observations             Observation[]
+  fireHotspots             FireHotspot[]
+  weatherSnapshots         WeatherSnapshot[]
+  cameraDetections         CameraDetection[]
+  visitorPressures         VisitorPressure[]
+  manualNotes              ManualNote[]
+  riskScores               ZoneRiskScore[]
+  selectedZones            SelectedZone[]
+
+  @@index([parkId])
+  @@index([zoneType])
+}
+
+model DataSource {
+  id               String         @id @default(cuid())
+  parkId           String
+  type             DataSourceType
+  name             String
+  status           String         @default("demo")
+  lastSyncedAt     DateTime?
+  freshnessWarning String?
+  config           Json?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  park             Park           @relation(fields: [parkId], references: [id], onDelete: Cascade)
+  importBatches    ImportBatch[]
+
+  @@unique([parkId, type])
+}
+
+model ImportBatch {
+  id             String         @id @default(cuid())
+  dataSourceId   String
+  sourceType     DataSourceType
+  filename       String?
+  status         String         @default("PENDING")
+  recordCount    Int            @default(0)
+  errorMessage   String?
+  metadata       Json?
+  createdAt      DateTime       @default(now())
+  dataSource     DataSource     @relation(fields: [dataSourceId], references: [id], onDelete: Cascade)
+  observations   Observation[]
+  detections     CameraDetection[]
+  visitorRecords VisitorPressure[]
+}
+
+model Observation {
+  id          String               @id @default(cuid())
+  importBatchId String?
+  zoneId      String?
+  externalId  String?
+  timestamp   DateTime
+  lat         Float
+  lng         Float
+  eventType   ObservationEventType
+  species     String?
+  threatType  String?
+  patrolTeam  String?
+  confidence  Float?
+  notes       String?
+  raw         Json?
+  createdAt   DateTime             @default(now())
+  importBatch ImportBatch?          @relation(fields: [importBatchId], references: [id], onDelete: SetNull)
+  zone        Zone?                 @relation(fields: [zoneId], references: [id], onDelete: SetNull)
+
+  @@index([timestamp])
+  @@index([zoneId])
+}
+
+model FireHotspot {
+  id         String   @id @default(cuid())
+  zoneId     String?
+  source     String   @default("NASA_FIRMS")
+  satellite  String?
+  timestamp  DateTime
+  lat        Float
+  lng        Float
+  brightness Float?
+  confidence String?
+  frp        Float?
+  raw        Json?
+  createdAt  DateTime @default(now())
+  zone       Zone?    @relation(fields: [zoneId], references: [id], onDelete: SetNull)
+
+  @@index([timestamp])
+  @@index([zoneId])
+}
+
+model WeatherSnapshot {
+  id                  String   @id @default(cuid())
+  zoneId              String
+  timestamp           DateTime
+  temperature2m       Float?
+  relativeHumidity2m  Float?
+  windSpeed10m        Float?
+  windDirection10m    Float?
+  windGusts10m        Float?
+  precipitation       Float?
+  soilMoisture0To1cm  Float?
+  soilMoisture1To3cm  Float?
+  raw                 Json?
+  createdAt           DateTime @default(now())
+  zone                Zone     @relation(fields: [zoneId], references: [id], onDelete: Cascade)
+
+  @@index([zoneId, timestamp])
+}
+
+model CameraDetection {
+  id            String       @id @default(cuid())
+  importBatchId String?
+  zoneId        String?
+  cameraId      String
+  timestamp     DateTime
+  lat           Float
+  lng           Float
+  species       String
+  count         Int          @default(1)
+  confidence    Float?
+  imageUrl      String?
+  notes         String?
+  raw           Json?
+  createdAt     DateTime     @default(now())
+  importBatch   ImportBatch?  @relation(fields: [importBatchId], references: [id], onDelete: SetNull)
+  zone          Zone?         @relation(fields: [zoneId], references: [id], onDelete: SetNull)
+
+  @@index([timestamp])
+  @@index([species])
+}
+
+model VisitorPressure {
+  id            String       @id @default(cuid())
+  importBatchId String?
+  zoneId        String?
+  date          DateTime
+  zoneCode      String
+  visitorCount  Int          @default(0)
+  vehicleCount  Int          @default(0)
+  busCount      Int          @default(0)
+  source        String
+  notes         String?
+  raw           Json?
+  createdAt     DateTime     @default(now())
+  importBatch   ImportBatch?  @relation(fields: [importBatchId], references: [id], onDelete: SetNull)
+  zone          Zone?         @relation(fields: [zoneId], references: [id], onDelete: SetNull)
+
+  @@index([date])
+  @@index([zoneCode])
+}
+
+model ManualNote {
+  id        String   @id @default(cuid())
+  zoneId    String?
+  author    String?
+  timestamp DateTime @default(now())
+  category  String
+  severity  Int      @default(1)
+  lat       Float?
+  lng       Float?
+  note      String
+  createdAt DateTime @default(now())
+  zone      Zone?    @relation(fields: [zoneId], references: [id], onDelete: SetNull)
+
+  @@index([timestamp])
+  @@index([zoneId])
+}
+
+model RiskRun {
+  id           String          @id @default(cuid())
+  status       RiskRunStatus   @default(PENDING)
+  weights      Json
+  version      String          @default("v1")
+  startedAt    DateTime        @default(now())
+  completedAt  DateTime?
+  errorMessage String?
+  createdAt    DateTime        @default(now())
+  scores       ZoneRiskScore[]
+  optimizations OptimizationRun[]
+}
+
+model ZoneRiskScore {
+  id                 String     @id @default(cuid())
+  riskRunId          String
+  zoneId             String
+  fireRisk           Float
+  wildlifeRisk       Float
+  combinedPriority   Float
+  operationalFeasibility Float
+  label              RiskLabel
+  topFactors         Json
+  recommendedAction  String
+  freshnessWarning   String?
+  createdAt          DateTime   @default(now())
+  riskRun            RiskRun    @relation(fields: [riskRunId], references: [id], onDelete: Cascade)
+  zone               Zone       @relation(fields: [zoneId], references: [id], onDelete: Cascade)
+
+  @@unique([riskRunId, zoneId])
+  @@index([zoneId])
+}
+
+model OptimizationRun {
+  id                    String              @id @default(cuid())
+  riskRunId             String?
+  method                OptimizationMethod
+  status                String              @default("SUCCESS")
+  maxZones              Int
+  maxPatrolHours        Float
+  rangerTeams           Int
+  requireFireCoverage   Boolean             @default(true)
+  requireWildlifeCoverage Boolean            @default(true)
+  coverageScore         Float?
+  travelPenalty         Float?
+  estimatedPatrolHours  Float?
+  quboPayload           Json?
+  qbraidJobId           String?
+  qbraidStatus          String?
+  qbraidResult          Json?
+  fallbackReason        String?
+  createdAt             DateTime            @default(now())
+  completedAt           DateTime?
+  riskRun               RiskRun?            @relation(fields: [riskRunId], references: [id], onDelete: SetNull)
+  selectedZones         SelectedZone[]
+  patrolPlans           PatrolPlan[]
+
+  @@index([createdAt])
+}
+
+model SelectedZone {
+  id                String          @id @default(cuid())
+  optimizationRunId String
+  zoneId            String
+  rank              Int
+  reason            String
+  estimatedHours    Float
+  scoreContribution Float
+  createdAt         DateTime        @default(now())
+  optimizationRun   OptimizationRun @relation(fields: [optimizationRunId], references: [id], onDelete: Cascade)
+  zone              Zone            @relation(fields: [zoneId], references: [id], onDelete: Cascade)
+
+  @@unique([optimizationRunId, zoneId])
+}
+
+model PatrolPlan {
+  id                String          @id @default(cuid())
+  optimizationRunId String
+  teamName          String
+  route             Json
+  objective         String
+  why               String
+  estimatedHours    Float
+  safetyNote        String
+  fallback          String
+  createdAt         DateTime        @default(now())
+  optimizationRun   OptimizationRun @relation(fields: [optimizationRunId], references: [id], onDelete: Cascade)
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  action    String
+  entity    String
+  entityId  String?
+  metadata  Json?
+  createdAt DateTime @default(now())
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([createdAt])
+  @@index([entity, entityId])
+}
