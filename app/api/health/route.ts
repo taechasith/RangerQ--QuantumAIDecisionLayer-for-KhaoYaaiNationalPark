@@ -15,7 +15,6 @@ export async function GET() {
       firms: Boolean(process.env.FIRMS_MAP_KEY),
       qbraid: Boolean(process.env.QBRAID_API_KEY),
       qbraidEndpoint: Boolean(process.env.QBRAID_API_URL),
-      smartConnect: Boolean(process.env.SMART_CONNECT_URL && process.env.SMART_CONNECT_USERNAME && process.env.SMART_CONNECT_PASSWORD),
     },
     freshness: [] as Array<{ type: string; name: string; status: string; lastSyncedAt: string; freshnessWarning: string }>,
   };

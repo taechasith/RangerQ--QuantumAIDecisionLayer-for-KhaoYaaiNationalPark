@@ -24,7 +24,7 @@ export default async function SettingsPage() {
         <Card title="NASA FIRMS" value={process.env.FIRMS_MAP_KEY ? "Configured" : "Missing"} detail={process.env.FIRMS_MAP_KEY ? "Real hotspot sync enabled" : "Falls back to demo hotspot mode"} />
         <Card title="qBraid API" value={process.env.QBRAID_API_KEY ? "Configured" : "Missing"} detail={process.env.QBRAID_API_KEY ? "Remote credential present" : "Local worker fallback available"} />
         <Card title="qBraid endpoint" value={process.env.QBRAID_API_URL ? "Configured" : "Missing"} detail={process.env.QBRAID_API_URL ? "REST submission path enabled" : "External worker command shown"} />
-        <Card title="SMART Connect" value={process.env.SMART_CONNECT_URL ? "Configured" : "Disabled"} detail="CSV/GeoJSON import remains active" />
+        <Card title="SMART Import" value="Active" detail="Supports CSV and GeoJSON upload formats" />
       </div>
       <div className="mt-6 rounded-lg border border-zinc-200 bg-white p-5">
         <h2 className="font-semibold text-zinc-950">Google Apps Script database</h2>

@@ -13,7 +13,7 @@ graph TD
     subgraph Data Sources
         FIRMS[NASA FIRMS <br/> Satellite Thermal Fire Alerts]
         Meteo[Open-Meteo <br/> Temperature, Humidity, Soil Moisture]
-        SMART[SMART Connect <br/> Ranger Patrol Logs & Threats]
+        SMART[SMART CSV Ingestion <br/> Ranger Patrol Logs & Threats]
         CamAI[Camera Trap AI <br/> Wildlife Species Detections]
         SheetDb[Google Sheets Data Backend]
     end
@@ -39,7 +39,7 @@ graph TD
     %% Flow connections
     FIRMS --> Sync
     Meteo --> Sync
-    SMART --> Sync
+    SMART --> GStore
     CamAI --> Sync
     
     Sync --> GStore
@@ -178,3 +178,11 @@ RangerQ includes Playwright End-to-End tests to validate risk calculations, impo
   ```bash
   pnpm e2e:ui
   ```
+
+---
+
+## 🌟 Context & Acknowledgements
+
+This project was developed in just **2 days** during the **SEA Quantum Leadership Summit 2026** with supported API tokens kindly provided by **qBraid**. 
+
+*Note: The developer wasn't an actual hackathon participant, but rather attended as a speaker and media representative. However, seeing everyone else coding and building amazing things was so inspiring that it made them want to jump in and code this!* 💻✨
