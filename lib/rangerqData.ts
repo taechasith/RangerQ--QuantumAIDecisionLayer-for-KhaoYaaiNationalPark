@@ -155,19 +155,28 @@ function normalizeRiskScore(row: Record<string, unknown>, zoneById: Map<string, 
 }
 
 export function getBackendStatus(): BackendStatus {
+  const backend = process.env.DATA_BACKEND || "google_sheets";
+  const isDatabase = backend === "database";
+
   const apiUrl = process.env.GOOGLE_SHEETS_API_URL || "";
   const editorUrl = process.env.GOOGLE_APPS_SCRIPT_EDITOR_URL || "https://script.google.com/d/1G7wB__c1rYPjSSNJ2UArsHHttJb2VpsW7LnFnhGDl1lrEXbU3pDb6uea/edit?usp=sharing";
-  const configured = Boolean(apiUrl && process.env.GOOGLE_SHEETS_API_TOKEN);
+  
+  const configured = isDatabase 
+    ? Boolean(process.env.DATABASE_URL) 
+    : Boolean(apiUrl && process.env.GOOGLE_SHEETS_API_TOKEN);
+
   const isWebApp = apiUrl.includes("/macros/s/") && apiUrl.endsWith("/exec");
 
   return {
-    backend: process.env.DATA_BACKEND || "google_sheets",
+    backend,
     configured,
     apiUrl,
     editorUrl,
-    message: configured && isWebApp
-      ? "Google Apps Script web app is configured as the database backend."
-      : "Deploy the Apps Script as a Web App and set GOOGLE_SHEETS_API_URL to the /exec URL.",
+    message: isDatabase
+      ? "PostgreSQL database is configured as the operational backend via Prisma."
+      : configured && isWebApp
+        ? "Google Apps Script web app is configured as the database backend."
+        : "Deploy the Apps Script as a Web App and set GOOGLE_SHEETS_API_URL to the /exec URL.",
   };
 }
 

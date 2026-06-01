@@ -1,5 +1,6 @@
 import { Card, PageHeader } from "@/components/layout/PageHeader";
 import { RunRiskButton } from "@/components/dashboard/RunRiskButton";
+import { RiskChart } from "@/components/dashboard/RiskChart";
 import { getOperationsSnapshot } from "@/lib/rangerqData";
 
 export const dynamic = "force-dynamic";
@@ -32,11 +33,16 @@ export default async function DashboardPage() {
         <Card title="Latest risk run" value={riskRun?.completedAt ? new Date(riskRun.completedAt).toLocaleString("en-US", { timeZone: "Asia/Bangkok" }) : "Not run"} detail={riskRun?.version || "Run risk scoring to create explainable scores"} />
       </div>
 
-      <div className="mt-6 animate-slide-up delay-100">
+      <div className="mt-6 rounded-xl border border-zinc-900 bg-zinc-900/20 backdrop-blur-md p-5 animate-slide-up delay-100">
+        <h2 className="text-base font-bold text-white mb-4">Spatiotemporal Risk Analytics (Top 10 Zones)</h2>
+        <RiskChart zones={zones} riskScores={riskScores} />
+      </div>
+
+      <div className="mt-6 animate-slide-up delay-150">
         <RunRiskButton />
       </div>
 
-      <section className="mt-6 grid gap-6 lg:grid-cols-2 animate-slide-up delay-150">
+      <section className="mt-6 grid gap-6 lg:grid-cols-2 animate-slide-up delay-200">
         <div className="rounded-xl border border-zinc-900 bg-zinc-900/20 backdrop-blur-md">
           <div className="border-b border-zinc-900 px-5 py-4">
             <h2 className="text-base font-bold text-white">Top Action Zones</h2>
@@ -80,7 +86,7 @@ export default async function DashboardPage() {
         </div>
       </section>
 
-      <div className="mt-6 rounded-xl border border-zinc-900 bg-zinc-900/20 backdrop-blur-md p-5 animate-slide-up delay-200">
+      <div className="mt-6 rounded-xl border border-zinc-900 bg-zinc-900/20 backdrop-blur-md p-5 animate-slide-up delay-300">
         <h2 className="text-base font-bold text-white">Backend Status</h2>
         <p className="mt-2 text-sm leading-relaxed text-zinc-400">{status.message}</p>
       </div>

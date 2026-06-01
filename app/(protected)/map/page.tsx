@@ -9,6 +9,12 @@ export default async function MapPage() {
   const { zones, riskScores, riskRun } = await getOperationsSnapshot();
   const mapZones = buildRiskMapZones(zones, riskScores);
 
+  const envStyleUrl = process.env.MAP_STYLE_URL;
+  const mapStyleUrl =
+    envStyleUrl && envStyleUrl !== "https://demotiles.maplibre.org/style.json"
+      ? envStyleUrl
+      : "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json";
+
   return (
     <>
       <PageHeader
@@ -17,7 +23,7 @@ export default async function MapPage() {
       />
       <RiskMap
         zones={mapZones}
-        mapStyleUrl={process.env.MAP_STYLE_URL || "https://demotiles.maplibre.org/style.json"}
+        mapStyleUrl={mapStyleUrl}
         hasRiskRun={Boolean(riskRun)}
       />
     </>

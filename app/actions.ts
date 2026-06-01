@@ -6,9 +6,9 @@ import { clearSession, setSession } from "@/lib/auth";
 
 export async function loginAction(formData: FormData) {
   const email = String(formData.get("email") || "").trim().toLowerCase();
-  const password = String(formData.get("password") || "");
-  const expectedEmail = (process.env.DEMO_ADMIN_EMAIL || "admin@rangerq.local").toLowerCase();
-  const expectedPassword = process.env.DEMO_ADMIN_PASSWORD || "change-this-password";
+  const password = String(formData.get("password") || "").trim();
+  const expectedEmail = String(process.env.DEMO_ADMIN_EMAIL || "admin@rangerq.local").trim().toLowerCase();
+  const expectedPassword = String(process.env.DEMO_ADMIN_PASSWORD || "change-this-password").trim();
 
   // Secure debug log for Vercel Runtime Logs
   console.log("Auth Debug Details:", {
