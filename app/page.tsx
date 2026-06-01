@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Trees, ArrowRight, Shield, Cpu, Activity, Map, ShieldAlert } from "lucide-react";
 import { DecisionCube } from "@/components/layout/DecisionCube";
+import { ThreeBackground } from "@/components/layout/ThreeBackground";
 
 const loadingSteps = [
   "Initializing RangerQ Digital Twin...",
@@ -89,6 +90,9 @@ export default function Home() {
         <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-emerald-900/20 blur-[120px] pointer-events-none" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-cyan-900/10 blur-[120px] pointer-events-none" />
         <div className="absolute top-[30%] right-[10%] w-[300px] h-[300px] rounded-full bg-emerald-950/30 blur-[80px] pointer-events-none" />
+
+        {/* 🌌 Dynamic Three.js Quantum Particle Background */}
+        <ThreeBackground />
 
         {/* Header */}
         <header className="relative z-10 border-b border-zinc-900 bg-zinc-950/70 backdrop-blur-md animate-fade-in">
