@@ -11,13 +11,13 @@ export default async function ReportsPage() {
   return (
     <div className="space-y-6 animate-fade-in">
       <PageHeader
-        title="Reports"
-        description="Daily ranger action plan, data freshness, warnings, and CSV/print export for field operations."
+        title="Daily Patrol Reports"
+        description="Print, export, and review the patrol routing plan and latest environmental warnings for field briefings."
       />
 
-      <div className="flex flex-col gap-4 rounded-xl border border-zinc-900/90 bg-zinc-900/35 p-4 shadow-lg shadow-black/10 backdrop-blur-md sm:flex-row sm:items-center sm:justify-between sm:p-5 animate-slide-up delay-75">
+      <div className="flex flex-col gap-4 rounded-xl border border-zinc-900 bg-zinc-900/20 backdrop-blur-md p-5 sm:flex-row sm:items-center sm:justify-between animate-slide-up delay-75">
         <div>
-          <h2 className="text-base font-bold text-white">Daily Patrol Report</h2>
+          <h2 className="text-base font-bold text-white">Operational Briefing Report</h2>
           <p className="mt-1 text-xs text-zinc-400">
             Generated: {new Date(report.generatedAt).toLocaleString("en-US", { timeZone: report.timezone })} (Bangkok Time)
           </p>
@@ -25,16 +25,16 @@ export default async function ReportsPage() {
         <ReportActions />
       </div>
 
-      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4 animate-slide-up delay-100">
-        <Metric title="Top zones" value={String(report.topZones.length)} detail="Selected or fallback patrol priorities" />
-        <Metric title="Teams" value={String(report.actionPlan.length)} detail="Generated assignments" />
-        <Metric title="Optimizer" value={report.method || "Fallback"} detail={report.optimizationRunId ? report.optimizationRunId.slice(0, 16) + "..." : "No saved run"} />
-        <Metric title="qBraid" value={report.qbraidStatus || "Not submitted"} detail="Classical action plan is operational" />
+      <section className="grid gap-4 md:grid-cols-4 animate-slide-up delay-100">
+        <Metric title="High Priority Zones" value={String(report.topZones.length)} detail="Selected or baseline patrol priorities" />
+        <Metric title="Active Teams" value={String(report.actionPlan.length)} detail="Generated assignments" />
+        <Metric title="Planning Mode" value={report.method || "Baseline"} detail={report.optimizationRunId ? report.optimizationRunId.slice(0, 16) + "..." : "No active optimization run"} />
+        <Metric title="Quantum Verification" value={report.qbraidStatus || "Not submitted"} detail="Classical action plan is operational" />
       </section>
 
       <section className="rounded-xl border border-zinc-900 bg-zinc-900/20 backdrop-blur-md overflow-hidden animate-slide-up delay-150">
         <div className="border-b border-zinc-900 px-5 py-4">
-          <h2 className="text-base font-bold text-white">Ranger Action Plan</h2>
+          <h2 className="text-base font-bold text-white">Team Patrol Routes & Briefing</h2>
         </div>
         <div className="grid gap-4 p-5 lg:grid-cols-2">
           {report.actionPlan.map((plan) => (
@@ -43,7 +43,7 @@ export default async function ReportsPage() {
                 <p className="font-bold text-white text-sm">{plan.teamName}</p>
                 <span className="rounded-full bg-emerald-950/30 border border-emerald-900/30 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-emerald-400">{plan.estimatedHours} Hours</span>
               </div>
-              <p className="text-xs text-zinc-300"><strong className="text-zinc-400">Route:</strong> {plan.route.join(" -> ")}</p>
+              <p className="text-xs text-zinc-300"><strong className="text-zinc-400">Route:</strong> {plan.route.join(" ➔ ")}</p>
               <p className="text-xs text-zinc-300"><strong className="text-zinc-400">Objective:</strong> {plan.objective}</p>
               <p className="text-xs leading-relaxed text-zinc-400"><strong className="text-zinc-500">Rationale:</strong> {plan.why}</p>
               <div className="grid gap-2 pt-2 border-t border-zinc-900 text-xs">
@@ -57,25 +57,25 @@ export default async function ReportsPage() {
 
       <section className="rounded-xl border border-zinc-900 bg-zinc-900/20 backdrop-blur-md overflow-hidden animate-slide-up delay-200">
         <div className="border-b border-zinc-900 px-5 py-4">
-          <h2 className="text-base font-bold text-white">Top 5 Patrol Zones</h2>
+          <h2 className="text-base font-bold text-white">Priority Threat Zones</h2>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
             <thead className="bg-zinc-950 text-zinc-400 border-b border-zinc-900 font-bold uppercase tracking-wider">
               <tr>
-                <th className="px-5 py-3.5">Rank</th>
-                <th className="px-5 py-3.5">Zone</th>
-                <th className="px-5 py-3.5">Fire</th>
-                <th className="px-5 py-3.5">Wildlife</th>
-                <th className="px-5 py-3.5">Combined</th>
-                <th className="px-5 py-3.5 text-left">Why Selected</th>
+                <th className="px-5 py-3.5">Priority Rank</th>
+                <th className="px-5 py-3.5">Zone Code & Area</th>
+                <th className="px-5 py-3.5">Fire Danger</th>
+                <th className="px-5 py-3.5">Wildlife Threat</th>
+                <th className="px-5 py-3.5">Combined Risk</th>
+                <th className="px-5 py-3.5 text-left">Reason for Selection</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-900">
               {report.topZones.map((zone) => (
                 <tr key={`${zone.rank}-${zone.code}`} className="hover:bg-zinc-900/10 transition-colors">
                   <td className="px-5 py-4 font-bold text-white">{zone.rank}</td>
-                  <td className="px-5 py-4 text-zinc-300 font-semibold">{zone.code} - {zone.name}</td>
+                  <td className="px-5 py-4 text-zinc-300 font-semibold">{zone.code} — {zone.name}</td>
                   <td className="px-5 py-4 text-zinc-300">{zone.fireRisk}</td>
                   <td className="px-5 py-4 text-zinc-300">{zone.wildlifeRisk}</td>
                   <td className="px-5 py-4 font-bold text-emerald-400">{zone.combinedPriority}</td>
@@ -88,14 +88,14 @@ export default async function ReportsPage() {
       </section>
 
       <section className="grid gap-6 lg:grid-cols-3 animate-slide-up delay-300">
-        <WarningList title="Fire-risk Warnings" items={report.fireWarnings} empty="No severe fire warnings in selected zones." />
-        <WarningList title="Wildlife-boundary Warnings" items={report.wildlifeWarnings} empty="No severe wildlife-boundary warnings in selected zones." />
-        <WarningList title="Missing or Demo Data" items={report.missingData} empty="No missing data warnings reported." />
+        <WarningList title="Fire Threat Warnings" items={report.fireWarnings} empty="No severe fire warnings in selected zones." />
+        <WarningList title="Wildlife Conflict Warnings" items={report.wildlifeWarnings} empty="No severe wildlife-boundary warnings in selected zones." />
+        <WarningList title="Information Alerts" items={report.missingData} empty="No missing data warnings reported." />
       </section>
 
       <section className="rounded-xl border border-zinc-900 bg-zinc-900/20 backdrop-blur-md overflow-hidden animate-slide-up delay-300">
         <div className="border-b border-zinc-900 px-5 py-4">
-          <h2 className="text-base font-bold text-white">Data Freshness</h2>
+          <h2 className="text-base font-bold text-white">Data Source Update Status</h2>
         </div>
         <div className="divide-y divide-zinc-900">
           {report.dataSources.map((source) => (
@@ -119,12 +119,12 @@ export default async function ReportsPage() {
 
 function Metric({ title, value, detail }: { title: string; value: string; detail: string }) {
   return (
-    <div className="group rounded-xl border border-zinc-900/90 bg-zinc-900/35 p-4 shadow-lg shadow-black/10 backdrop-blur-md transition-all duration-300 hover:border-emerald-500/30 hover:bg-zinc-900/55 sm:p-5">
+    <div className="group rounded-xl border border-zinc-900 bg-zinc-900/20 backdrop-blur-md p-5 hover:border-emerald-500/30 hover:bg-zinc-900/40 transition-all duration-300">
       <p className="text-xs font-semibold uppercase tracking-wider text-zinc-400 group-hover:text-zinc-300 transition-colors">{title}</p>
       <p className="mt-3 text-2xl font-black tracking-tight text-white break-words">
         {value}
       </p>
-      <p className="mt-2 break-words text-xs text-zinc-500 [overflow-wrap:anywhere]">{detail}</p>
+      <p className="mt-2 text-xs text-zinc-500">{detail}</p>
     </div>
   );
 }
@@ -132,13 +132,13 @@ function Metric({ title, value, detail }: { title: string; value: string; detail
 function WarningList({ title, items, empty }: { title: string; items: string[]; empty: string }) {
   const isWarning = items.length > 0 && items[0] !== empty;
   return (
-    <div className="flex flex-col justify-between rounded-xl border border-zinc-900/90 bg-zinc-900/35 p-4 shadow-lg shadow-black/10 backdrop-blur-md sm:p-5">
+    <div className="rounded-xl border border-zinc-900 bg-zinc-900/20 backdrop-blur-md p-5 flex flex-col justify-between">
       <div>
         <h2 className="text-base font-bold text-white">{title}</h2>
         <div className="mt-4 space-y-3">
           {(items.length ? items : [empty]).map((item) => (
             <p key={item} className={`text-xs leading-relaxed ${isWarning ? "text-amber-400 font-medium" : "text-zinc-400"}`}>
-              {isWarning ? "Warning: " : ""}{item}
+              {isWarning ? "⚠️ " : ""}{item}
             </p>
           ))}
         </div>

@@ -14,10 +14,10 @@ import {
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/map", label: "Risk Map", icon: Map },
-  { href: "/optimizer", label: "Optimizer", icon: Zap },
-  { href: "/imports", label: "Imports", icon: Upload },
-  { href: "/reports", label: "Reports", icon: FileText },
+  { href: "/map", label: "Interactive Map", icon: Map },
+  { href: "/optimizer", label: "Patrol Planner", icon: Zap },
+  { href: "/imports", label: "Import Data", icon: Upload },
+  { href: "/reports", label: "Patrol Reports", icon: FileText },
   { href: "/settings", label: "Settings", icon: Settings },
 ];
 

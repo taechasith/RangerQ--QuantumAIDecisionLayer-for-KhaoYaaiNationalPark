@@ -10,13 +10,13 @@ export default async function OptimizerPage() {
   return (
     <>
       <PageHeader
-        title="Optimization"
-        description="Select daily patrol zones with deterministic greedy/local-search optimization and an inspectable QUBO payload."
+        title="Smart Patrol Planner"
+        description="Choose which zones to patrol today based on threat levels, terrain difficulty, and ranger team availability."
       />
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        <Card title="Candidate zones" value={String(zones.length)} detail="Loaded from latest operations snapshot" />
-        <Card title="Risk run" value={riskRun?.status || "Base fallback"} detail={riskRun?.completedAt || "Run risk scoring for latest scores"} />
-        <Card title="Risk scores" value={String(riskScores.length)} detail="Used when available; base risk otherwise" />
+      <div className="grid gap-4 md:grid-cols-3">
+        <Card title="Zones Available" value={String(zones.length)} detail="Loaded from Khao Yai map regions" />
+        <Card title="Latest Threat Update" value={riskRun?.status || "Base baseline active"} detail={riskRun?.completedAt ? new Date(riskRun.completedAt).toLocaleDateString() : "Update danger levels for latest intelligence"} />
+        <Card title="Active Scores" value={String(riskScores.length)} detail="Calculated danger ratings in use" />
       </div>
       <div className="mt-6">
         <OptimizerResult />
