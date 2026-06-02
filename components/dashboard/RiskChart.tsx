@@ -60,19 +60,20 @@ export function RiskChart({
     });
 
   return (
-    <div className="h-[22rem] w-full sm:h-80">
+    <div className="relative h-[22rem] w-full sm:h-80">
       <ResponsiveContainer width="100%" height="100%">
         <ComposedChart
           data={chartData}
           margin={{ top: 10, right: 8, left: -18, bottom: 0 }}
         >
-          <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" vertical={false} />
+          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.08)" vertical={false} />
           <XAxis 
             dataKey="name" 
-            stroke="#94a3b8" 
+            stroke="#94a3b8"
             fontSize={10} 
             tickLine={false} 
-            axisLine={false} 
+            axisLine={false}
+            fontFamily="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"
           />
           <YAxis 
             stroke="#94a3b8" 
@@ -80,15 +81,18 @@ export function RiskChart({
             tickLine={false} 
             axisLine={false} 
             domain={[0, 100]}
+            fontFamily="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"
           />
           <Tooltip
             contentStyle={{
-              backgroundColor: "#09090b",
-              borderColor: "#18181b",
+              backgroundColor: "#091014",
+              borderColor: "rgba(255,255,255,0.12)",
               borderRadius: "12px",
               color: "#f4f4f5",
               fontSize: "11px",
+              boxShadow: "0 18px 50px rgba(0,0,0,0.35)",
             }}
+            labelStyle={{ color: "#5eead4", fontWeight: 800 }}
             cursor={{ fill: "rgba(255,255,255,0.03)" }}
           />
           <Legend 
@@ -100,24 +104,24 @@ export function RiskChart({
           />
           <Bar 
             dataKey="Fire Risk" 
-            fill="#ef4444" 
+            fill="#f59e0b" 
             radius={[4, 4, 0, 0]} 
-            maxBarSize={20}
+            maxBarSize={14}
             opacity={0.85}
           />
           <Bar 
             dataKey="Wildlife Risk" 
-            fill="#06b6d4" 
+            fill="#fb7185" 
             radius={[4, 4, 0, 0]} 
-            maxBarSize={20}
+            maxBarSize={14}
             opacity={0.85}
           />
           <Line 
             type="monotone" 
             dataKey="Combined Priority" 
-            stroke="#10b981" 
-            strokeWidth={2} 
-            dot={{ r: 3, stroke: "#10b981", strokeWidth: 1, fill: "#09090b" }} 
+            stroke="#14b8a6" 
+            strokeWidth={2.5} 
+            dot={{ r: 3, stroke: "#14b8a6", strokeWidth: 1.5, fill: "#081014" }} 
             activeDot={{ r: 5 }} 
           />
         </ComposedChart>

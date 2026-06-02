@@ -20,7 +20,7 @@ export default async function MapPage() {
   return (
     <>
       <PageHeader
-        title="Interactive Map"
+        title="Risk Map"
         description="Interactive digital twin map. Visualizes fire threats, wildlife movement, and patrol assignments across Khao Yai."
       />
       <RiskMap

@@ -101,6 +101,7 @@ export function RiskMap({
         zoom: 9,
         attributionControl: false,
       });
+      mapRef.current.getCanvas().classList.add("maplibregl-canvas");
 
       mapRef.current.addControl(new maplibregl.NavigationControl({ visualizePitch: true }), "top-right");
       mapRef.current.addControl(new maplibregl.AttributionControl({ compact: true }), "bottom-right");
