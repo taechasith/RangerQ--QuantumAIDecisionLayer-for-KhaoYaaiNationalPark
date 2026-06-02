@@ -1,9 +1,20 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import type { ComponentType } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Shield, Cpu, Activity, Map, ShieldAlert } from "lucide-react";
+import {
+  ArrowRight,
+  Activity,
+  ArrowUpRight,
+  Cpu,
+  Flame,
+  Map,
+  RadioTower,
+  Shield,
+  ShieldAlert,
+} from "lucide-react";
 import { DecisionCube } from "@/components/layout/DecisionCube";
 import { ThreeBackground } from "@/components/layout/ThreeBackground";
 
@@ -47,27 +58,25 @@ export default function Home() {
     <>
       {/* First-time entry loader */}
       {loading && (
-        <div className="fixed inset-0 z-50 bg-zinc-950 flex flex-col items-center justify-center p-6 selection:bg-transparent">
-          {/* Ambient Loader Glow */}
-          <div className="absolute w-[300px] h-[300px] rounded-full bg-emerald-500/10 blur-[100px] pointer-events-none" />
+        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#060a0d] p-6 selection:bg-transparent">
+          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.025)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.025)_1px,transparent_1px)] bg-[size:44px_44px] opacity-30" />
+          <div className="absolute h-[320px] w-[320px] rounded-full bg-emerald-500/10 blur-[100px] pointer-events-none" />
           
           <div className="relative text-center space-y-6 max-w-sm w-full">
-            {/* Pulsing Core */}
-            <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-zinc-900 border border-zinc-800 shadow-xl shadow-emerald-950/20 mx-auto animate-pulse p-2.5">
+            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl border border-emerald-500/20 bg-[#081014] p-2.5 shadow-xl shadow-emerald-950/20 animate-pulse">
               <Image src="/RengerQ_logo.png" alt="RangerQ Logo" width={48} height={48} className="h-12 w-auto object-contain animate-bounce [animation-duration:2.5s]" />
             </div>
 
             <div className="space-y-2">
-              <h2 className="text-lg font-black tracking-wider uppercase text-white">RangerQ Engine</h2>
-              <p className="text-[10px] uppercase font-bold text-zinc-500 tracking-[0.15em] h-4">
+              <h2 className="font-mono text-lg font-black tracking-wider uppercase text-white">RangerQ Engine</h2>
+              <p className="telemetry-label h-4 text-[10px] font-bold text-slate-500">
                 {loadingText}
               </p>
             </div>
 
-            {/* Progress bar container */}
-            <div className="w-full bg-zinc-900 border border-zinc-800 rounded-full h-1.5 overflow-hidden">
+            <div className="h-1.5 w-full overflow-hidden rounded-full border border-white/[0.06] bg-slate-950">
               <div 
-                className="bg-gradient-to-r from-emerald-500 to-teal-400 h-full rounded-full transition-all duration-75 ease-out"
+                className="h-full rounded-full bg-gradient-to-r from-emerald-500 via-teal-400 to-cyan-400 transition-all duration-75 ease-out"
                 style={{ width: `${progress}%` }}
               />
             </div>
@@ -80,138 +89,135 @@ export default function Home() {
       )}
 
       {/* Main landing page */}
-      <div className={`relative min-h-screen bg-zinc-950 text-zinc-100 selection:bg-emerald-500 selection:text-black overflow-hidden font-sans ${loading ? "opacity-0" : "opacity-100 transition-opacity duration-500"}`}>
-        {/* Decorative Forest Ambient Glows */}
-        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-emerald-900/20 blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-cyan-900/10 blur-[120px] pointer-events-none" />
-        <div className="absolute top-[30%] right-[10%] w-[300px] h-[300px] rounded-full bg-emerald-950/30 blur-[80px] pointer-events-none" />
-
-        {/* Dynamic Three.js quantum particle background */}
+      <div className={`relative min-h-screen overflow-hidden bg-[#060a0d] text-slate-100 selection:bg-emerald-500 selection:text-black font-sans ${loading ? "opacity-0" : "opacity-100 transition-opacity duration-500"}`}>
         <ThreeBackground />
 
         {/* Header */}
-        <header className="relative z-10 border-b border-zinc-900 bg-zinc-950/70 backdrop-blur-md animate-fade-in">
-          <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
+        <header className="relative z-10 border-b border-white/[0.04] bg-[#060a0d]/72 backdrop-blur-xl animate-fade-in">
+          <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
             <div className="flex items-center gap-3">
-              <Image src="/RengerQ_logo.png" alt="RangerQ Logo" width={40} height={40} className="h-9 w-auto object-contain" />
+              <span className="grid h-10 w-10 place-items-center rounded-xl border border-emerald-500/25 bg-gradient-to-tr from-emerald-500/15 to-cyan-500/10 shadow-lg shadow-emerald-950/20">
+                <Image src="/RengerQ_logo.png" alt="RangerQ Logo" width={36} height={36} className="h-8 w-auto object-contain" />
+              </span>
               <div>
-                <span className="text-lg font-extrabold tracking-tight text-white leading-none">RangerQ</span>
-                <span className="ml-2 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-zinc-900 text-zinc-400 border border-zinc-800">Khao Yai</span>
-                <span className="block text-[10px] font-bold uppercase tracking-[0.18em] text-zinc-500">Q Forest Twin</span>
+                <span className="font-mono text-sm font-black tracking-wider text-white leading-none">Ranger<span className="text-emerald-400">Q</span></span>
+                <span className="ml-2 rounded border border-emerald-500/20 bg-emerald-500/10 px-1.5 py-0.5 font-mono text-[9px] font-bold uppercase text-emerald-300">Khao Yai</span>
+                <span className="telemetry-label block text-[9px] font-bold text-slate-500">Q-Forest Twin</span>
               </div>
             </div>
-            <nav className="flex shrink-0 items-center gap-6">
+            <nav className="flex shrink-0 items-center gap-2">
+              <div className="hidden items-center gap-1.5 rounded-lg border border-emerald-500/20 bg-emerald-500/5 px-2.5 py-2 text-[10px] font-bold text-emerald-400 sm:flex">
+                <RadioTower className="h-3.5 w-3.5" />
+                Live Demo
+              </div>
               <Link
                 href="/dashboard"
-                className="inline-flex h-9 items-center justify-center rounded-xl bg-zinc-900 px-5 text-xs font-bold text-zinc-200 border border-zinc-800 hover:bg-zinc-800 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-400 transition-all cursor-pointer"
+                className="inline-flex h-9 items-center justify-center rounded-xl border border-white/[0.06] bg-white/[0.03] px-5 text-xs font-bold text-slate-200 transition-all hover:border-emerald-500/25 hover:bg-emerald-500/5 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-400 cursor-pointer"
               >
-                Sign In
+                Open Twin
               </Link>
             </nav>
           </div>
         </header>
 
         {/* Hero Section */}
-        <main className="relative z-10 mx-auto max-w-6xl px-4 pt-10 pb-16 sm:px-6 sm:pt-20 sm:pb-24">
-          <div className="grid gap-12 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
+        <main className="relative z-10 mx-auto max-w-7xl px-4 pt-8 pb-14 sm:px-6 sm:pt-14 lg:pb-20">
+          <div className="grid min-h-[calc(100vh-88px)] gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
             {/* Left Column: Text & CTAs */}
             <div className="space-y-6 text-center lg:text-left animate-slide-up delay-75">
-              {/* Badge */}
-              <div className="inline-flex items-center gap-2 rounded-full border border-emerald-900/50 bg-emerald-950/30 px-3 py-1 text-xs font-medium text-emerald-400 mx-auto lg:mx-0">
+              <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-300 lg:mx-0">
                 <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-                Q-Forest Digital Twin
+                Version 2.4 - Quantum Solver Enabled
               </div>
 
-              <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl leading-tight">
-                Quantum-Assisted <br />
+              <h1 className="text-4xl font-black tracking-tight text-white sm:text-5xl lg:text-6xl leading-[0.98]">
+                RangerQ <br />
                 <span className="bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 bg-clip-text text-transparent">
-                  Decision Layer
+                  Forest Command Twin
                 </span>
               </h1>
 
-              <p className="text-sm md:text-base text-zinc-400 leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                Protecting Thailand&apos;s biodiversity through a real-time Spatiotemporal Digital Twin. 
-                Formulating ranger patrol optimization as a QUBO model solved on the qBraid platform.
+              <p className="mx-auto max-w-2xl text-sm leading-relaxed text-slate-400 md:text-base lg:mx-0">
+                Real-time ecological risk intelligence for fire prevention, wildlife conflict monitoring, and ranger patrol route optimization across Khao Yai National Park.
               </p>
 
-              <div className="pt-4 flex flex-col sm:flex-row justify-center lg:justify-start items-center gap-4">
+              <div className="grid gap-3 sm:grid-cols-3">
+                <StatusChip icon={Flame} label="NASA FIRMS" value="Hotspots" tone="amber" />
+                <StatusChip icon={Activity} label="Open-Meteo" value="Weather" tone="cyan" />
+                <StatusChip icon={Cpu} label="qBraid" value="Solver" tone="emerald" />
+              </div>
+
+              <div className="flex flex-col items-center gap-3 pt-2 sm:flex-row lg:justify-start">
                 <Link
                   href="/dashboard"
-                  className="group inline-flex h-12 w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 px-8 text-sm font-bold text-white shadow-lg shadow-emerald-950/50 hover:from-emerald-500 hover:to-teal-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-400 transition-all duration-300 cursor-pointer"
+                  className="group inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-emerald-500 px-8 text-sm font-black uppercase tracking-wide text-slate-950 shadow-lg shadow-emerald-950/50 transition-all duration-300 hover:bg-emerald-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-400 cursor-pointer sm:w-auto"
                 >
-                  Open RangerQ
+                  Open RangerQ Platform
                   <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
                 <a
                   href="https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Ftaechasith%2FRangerQ--QuantumAIDecisionLayer-for-KhaoYaaiNationalPark"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex h-12 w-full sm:w-auto items-center justify-center rounded-xl border border-zinc-800 bg-zinc-900/30 px-6 text-sm font-bold text-zinc-300 hover:bg-zinc-900 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-400 transition-all duration-300"
+                  className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl border border-white/[0.06] bg-white/[0.025] px-6 text-sm font-bold text-slate-300 transition-all duration-300 hover:border-cyan-500/25 hover:bg-cyan-500/5 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-400 sm:w-auto"
                 >
                   Deploy Now
+                  <ArrowUpRight className="h-4 w-4" />
                 </a>
               </div>
             </div>
 
             {/* Right Column: Interactive Scrollable 3D Decision Cube */}
-            <div className="relative flex min-h-[280px] items-center justify-center animate-fade-in delay-150 sm:min-h-[360px]">
-              {/* Background circular radar layout behind cube */}
-              <div className="absolute inset-0 bg-radial-[circle_at_center,rgba(16,185,129,0.03)_0%,transparent_60%] pointer-events-none" />
-              <DecisionCube />
+            <div className="relative animate-fade-in delay-150">
+              <div className="console-panel rounded-2xl p-4 sm:p-5">
+                <div className="relative flex items-center justify-between border-b border-white/[0.04] pb-3">
+                  <div>
+                    <p className="telemetry-label text-[10px] font-bold text-slate-500">Command Model</p>
+                    <h2 className="mt-1 font-mono text-base font-bold text-white">Quantum Decision Core</h2>
+                  </div>
+                  <span className="rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2 py-1 text-[10px] font-bold text-emerald-300">Live Link</span>
+                </div>
+                <div className="relative flex min-h-[300px] items-center justify-center sm:min-h-[390px]">
+                  <div className="absolute inset-6 rounded-full border border-emerald-500/10" />
+                  <div className="absolute inset-14 rounded-full border border-cyan-500/10" />
+                  <DecisionCube />
+                </div>
+                <div className="relative grid gap-2 border-t border-white/[0.04] pt-3 sm:grid-cols-3">
+                  <MiniMetric label="Zones" value="20" />
+                  <MiniMetric label="Risk Runs" value="Live" />
+                  <MiniMetric label="Mode" value="Hybrid" />
+                </div>
+              </div>
             </div>
           </div>
 
           {/* Features Grid */}
-          <div className="mt-16 grid gap-4 sm:grid-cols-2 lg:mt-24 lg:grid-cols-4 animate-slide-up delay-200">
-            {/* Card 1 */}
-            <div className="group relative rounded-xl border border-zinc-900 bg-zinc-900/30 p-5 hover:border-emerald-500/30 hover:bg-zinc-900/50 transition-all duration-300">
-              <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-950/50 text-emerald-400 border border-emerald-900/30 group-hover:bg-emerald-900 group-hover:text-emerald-200 transition-colors">
-                <Map className="h-5 w-5" />
-              </div>
-              <h3 className="text-base font-bold text-white mb-2">3D Digital Twin</h3>
-              <p className="text-xs text-zinc-400 leading-relaxed">
-                Interactive spatiotemporal MapLibre mapping of trails, forest boundaries, water sources, and ranger stations.
-              </p>
-            </div>
-
-            {/* Card 2 */}
-            <div className="group relative rounded-xl border border-zinc-900 bg-zinc-900/30 p-5 hover:border-teal-500/30 hover:bg-zinc-900/50 transition-all duration-300">
-              <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-teal-950/50 text-teal-400 border border-teal-900/30 group-hover:bg-teal-900 group-hover:text-teal-200 transition-colors">
-                <Activity className="h-5 w-5" />
-              </div>
-              <h3 className="text-base font-bold text-white mb-2">Multi-Source Sync</h3>
-              <p className="text-xs text-zinc-400 leading-relaxed">
-                Continuous live sync with NASA FIRMS active fire hotspots and Open-Meteo hyper-local weather parameters.
-              </p>
-            </div>
-
-            {/* Card 3 */}
-            <div className="group relative rounded-xl border border-zinc-900 bg-zinc-900/30 p-5 hover:border-indigo-500/30 hover:bg-zinc-900/50 transition-all duration-300">
-              <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-950/50 text-indigo-400 border border-indigo-900/30 group-hover:bg-indigo-900 group-hover:text-indigo-200 transition-colors">
-                <Cpu className="h-5 w-5" />
-              </div>
-              <h3 className="text-base font-bold text-white mb-2">QUBO Optimization</h3>
-              <p className="text-xs text-zinc-400 leading-relaxed">
-                Formulated routing constraints solved via classical heuristics or quantum solvers on the qBraid network.
-              </p>
-            </div>
-
-            {/* Card 4 */}
-            <div className="group relative rounded-xl border border-zinc-900 bg-zinc-900/30 p-5 hover:border-emerald-500/30 hover:bg-zinc-900/50 transition-all duration-300">
-              <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-950/50 text-emerald-400 border border-emerald-900/30 group-hover:bg-emerald-900 group-hover:text-emerald-200 transition-colors">
-                <ShieldAlert className="h-5 w-5" />
-              </div>
-              <h3 className="text-base font-bold text-white mb-2">Threat Assessment</h3>
-              <p className="text-xs text-zinc-400 leading-relaxed">
-                Consolidated fire risk and wildlife priority scoring, mapping urgent ecological actions in real-time.
-              </p>
-            </div>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 animate-slide-up delay-200">
+            <FeatureCard icon={Map} title="Risk Map" badge="MapLibre" detail="Interactive park sectors, trails, boundaries, water sources, and ranger station overlays." tone="emerald" />
+            <FeatureCard icon={Flame} title="Fire Intelligence" badge="FIRMS" detail="Satellite hotspot context folded into field-ready fire risk scoring." tone="amber" />
+            <FeatureCard icon={ShieldAlert} title="Wildlife Conflict" badge="Camera AI" detail="Camera trap and corridor signals translated into patrol priorities." tone="rose" />
+            <FeatureCard icon={Cpu} title="Patrol Optimization" badge="qBraid" detail="Hybrid routing constraints for ranger team allocation and sector coverage." tone="cyan" />
           </div>
         </main>
 
+        <section className="relative z-10 border-y border-white/[0.04] bg-[#04070a]/82 px-4 py-8 sm:px-6">
+          <div className="mx-auto flex max-w-7xl flex-col gap-5 md:flex-row md:items-center md:justify-between">
+            <div>
+              <p className="telemetry-label text-[10px] font-bold text-slate-500">Live Data Stack</p>
+              <h2 className="mt-1 font-mono text-lg font-bold text-white">Satellite, weather, biodiversity, and quantum backends in one workflow.</h2>
+            </div>
+            <div className="flex flex-wrap items-center gap-3">
+              <Partner label="NASA FIRMS" tone="rose" />
+              <Partner label="Open-Meteo" tone="cyan" />
+              <Partner label="GBIF" tone="emerald" />
+              <Partner label="qBraid" tone="cyan" />
+            </div>
+          </div>
+        </section>
+
         {/* Footer */}
-        <footer className="relative z-10 border-t border-zinc-900 bg-zinc-950 py-10 mt-12 animate-fade-in">
-          <div className="mx-auto max-w-6xl px-4 sm:px-6 flex flex-col md:flex-row items-center justify-between gap-4 text-center text-xs text-zinc-500 md:text-left">
+        <footer className="relative z-10 bg-[#060a0d] py-8 animate-fade-in">
+          <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 text-center text-xs text-slate-500 sm:px-6 md:flex-row md:text-left">
             <div className="flex items-center gap-2">
               <Shield className="h-4 w-4 text-emerald-500" />
               <span>RangerQ Protected Area Planner - Khao Yai National Park</span>
@@ -223,5 +229,93 @@ export default function Home() {
         </footer>
       </div>
     </>
+  );
+}
+
+type IconComponent = ComponentType<{ className?: string }>;
+
+function StatusChip({
+  icon: Icon,
+  label,
+  value,
+  tone,
+}: {
+  icon: IconComponent;
+  label: string;
+  value: string;
+  tone: "emerald" | "amber" | "cyan";
+}) {
+  const tones = {
+    emerald: "border-emerald-500/20 bg-emerald-500/10 text-emerald-300",
+    amber: "border-amber-500/20 bg-amber-500/10 text-amber-300",
+    cyan: "border-cyan-500/20 bg-cyan-500/10 text-cyan-300",
+  };
+
+  return (
+    <div className={`rounded-xl border p-3 text-left ${tones[tone]}`}>
+      <div className="flex items-center gap-2">
+        <Icon className="h-4 w-4" />
+        <span className="telemetry-label text-[9px] font-bold text-current">{label}</span>
+      </div>
+      <p className="mt-2 font-mono text-sm font-black text-white">{value}</p>
+    </div>
+  );
+}
+
+function MiniMetric({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-lg border border-white/[0.05] bg-white/[0.025] px-3 py-2">
+      <p className="telemetry-label text-[9px] font-bold text-slate-500">{label}</p>
+      <p className="mt-1 font-mono text-sm font-black text-white">{value}</p>
+    </div>
+  );
+}
+
+function FeatureCard({
+  icon: Icon,
+  title,
+  badge,
+  detail,
+  tone,
+}: {
+  icon: IconComponent;
+  title: string;
+  badge: string;
+  detail: string;
+  tone: "emerald" | "amber" | "rose" | "cyan";
+}) {
+  const tones = {
+    emerald: "text-emerald-300 border-emerald-500/20 bg-emerald-500/10",
+    amber: "text-amber-300 border-amber-500/20 bg-amber-500/10",
+    rose: "text-rose-300 border-rose-500/20 bg-rose-500/10",
+    cyan: "text-cyan-300 border-cyan-500/20 bg-cyan-500/10",
+  };
+
+  return (
+    <div className="console-panel group rounded-xl p-5 transition-all duration-300 hover:border-emerald-500/25">
+      <div className="relative flex items-start justify-between gap-3">
+        <span className={`inline-flex h-10 w-10 items-center justify-center rounded-xl border ${tones[tone]}`}>
+          <Icon className="h-5 w-5" />
+        </span>
+        <span className={`rounded border px-2 py-0.5 font-mono text-[9px] font-bold uppercase ${tones[tone]}`}>{badge}</span>
+      </div>
+      <h3 className="relative mt-4 font-mono text-base font-bold text-white">{title}</h3>
+      <p className="relative mt-2 text-xs leading-relaxed text-slate-400">{detail}</p>
+    </div>
+  );
+}
+
+function Partner({ label, tone }: { label: string; tone: "emerald" | "rose" | "cyan" }) {
+  const tones = {
+    emerald: "bg-emerald-400",
+    rose: "bg-rose-400",
+    cyan: "bg-cyan-400",
+  };
+
+  return (
+    <div className="flex items-center gap-2 rounded-lg border border-white/[0.05] bg-white/[0.025] px-3 py-2">
+      <span className={`h-2 w-2 rounded-full ${tones[tone]}`} />
+      <span className="font-mono text-xs font-bold text-slate-300">{label}</span>
+    </div>
   );
 }
